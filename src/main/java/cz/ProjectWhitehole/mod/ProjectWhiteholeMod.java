@@ -15,13 +15,13 @@ public class ProjectWhiteholeMod {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
     	ModBlocks.init();
-    	ModItems.init();
+    	ModItems.init();    	
     	
     }
  
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
- 
+    	ModSmelting.init();
     }
  
     @Mod.EventHandler
