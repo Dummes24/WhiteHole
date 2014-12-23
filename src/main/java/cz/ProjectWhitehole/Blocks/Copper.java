@@ -44,5 +44,8 @@ public final class Copper extends Block{
 			return icons[side];
 		}
 		
+		public String returnName(){
+			return name;
+		}
 	
 }

@@ -11,20 +11,20 @@ import scala.tools.nsc.doc.model.Public;
 
 public final class ModBlocks {
 	
-	public static Block copper;
-	public static Block eccdurusium;
-	public static Block germanium;
-	public static Block platinum;
-	public static Block uranium;
-	public static Block tin;
+	public static Block copperOre;
+	public static Block eccdurusiumOre;
+	public static Block germaniumOre;
+	public static Block platinumOre;
+	public static Block uraniumOre;
+	public static Block tinOre;
 	
 	public static void init()
 	{
-		copper = new Copper();
-		eccdurusium = new Eccdurusium();
-		germanium = new Germanium();
-		platinum = new Platinum();
-		uranium = new Uranium();
-		tin = new Tin();		
+		copperOre = new Copper();
+		eccdurusiumOre = new Eccdurusium();
+		germaniumOre = new Germanium();
+		platinumOre = new Platinum();
+		uraniumOre = new Uranium();
+		tinOre = new Tin();		
 	}
 }
