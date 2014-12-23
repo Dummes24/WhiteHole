@@ -1,6 +1,6 @@
 package cz.ProjectWhitehole.items;
 
-import com.sun.org.apache.xml.internal.security.encryption.Reference;
+//import com.sun.org.apache.xml.internal.security.encryption.Reference;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import cz.ProjectWhitehole.mod.ProjectWhiteholeMod;
