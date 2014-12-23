@@ -14,5 +14,6 @@ public final class CopperIngot extends Item{
   		setUnlocalizedName(ProjectWhiteholeMod.MODID +"_" + name);
   		setCreativeTab(CreativeTabs.tabMisc);
   		GameRegistry.registerItem(this, name);
+  		//Is git working #Random update for testing git
   	}
 }
