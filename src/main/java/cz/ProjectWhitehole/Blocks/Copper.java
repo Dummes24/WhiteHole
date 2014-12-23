@@ -40,8 +40,7 @@ public final class Copper extends Block{
 	}
 
 		@Override
-		public IIcon getIcon(int side, int meta) {
-			// TODO Auto-generated method stub
+		public IIcon getIcon(int side, int meta) {			
 			return icons[side];
 		}
 		
