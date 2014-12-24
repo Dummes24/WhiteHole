@@ -1,17 +1,38 @@
 package cz.ProjectWhitehole.mod;
 
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @Mod(modid = ProjectWhiteholeMod.MODID, version = ProjectWhiteholeMod.VERSION)
 public class ProjectWhiteholeMod {
 	public static final String MODID = "projectwhitehole";
     public static final String VERSION = "0.0.1";
     
+	public static CreativeTabs tabWhiteHole = new CreativeTabs("WhiteHole"){
+		
+		@SideOnly(Side.CLIENT)
+		
+		public Item getTabIconItem(){
+			return Item.getItemFromBlock(Blocks.anvil);
+		}
+	};
+	
+	public static CreativeTabs tabWhiteHoleMaterials = new CreativeTabs("WhiteHoleMaterials"){
+		
+		@SideOnly(Side.CLIENT)
+		
+		public Item getTabIconItem(){
+			return Item.getItemFromBlock(Blocks.brick_block);
+		}
+	};
+	
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
     	ModBlocks.init();
