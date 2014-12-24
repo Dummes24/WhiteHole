@@ -6,6 +6,7 @@ import cz.ProjectWhitehole.Blocks.Germanium;
 import cz.ProjectWhitehole.Blocks.Platinum;
 import cz.ProjectWhitehole.Blocks.Tin;
 import cz.ProjectWhitehole.Blocks.Uranium;
+import cz.ProjectWhitehole.Blocks.IndustrialRefiner;
 import net.minecraft.block.Block;
 import scala.tools.nsc.doc.model.Public;
 
@@ -18,6 +19,9 @@ public final class ModBlocks {
 	public static Block uraniumOre;
 	public static Block tinOre;
 	
+	//Machines
+	public static Block IndustrialRefiner;
+	
 	public static void init()
 	{
 		copperOre = new Copper();
@@ -25,6 +29,9 @@ public final class ModBlocks {
 		germaniumOre = new Germanium();
 		platinumOre = new Platinum();
 		uraniumOre = new Uranium();
-		tinOre = new Tin();		
+		tinOre = new Tin();
+		
+		//Machines
+		IndustrialRefiner = new IndustrialRefiner(false);
 	}
 }
