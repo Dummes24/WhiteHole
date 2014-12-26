@@ -1,0 +1,15 @@
+package cz.ProjectWhitehole.tileentity;
+
+import net.minecraft.tileentity.TileEntity;
+
+public class TileEntityIndustrialRefiner extends TileEntity {
+	
+	private String localizedName;
+
+	public void setGuiDisplayName(String displayName) {
+		
+		this.localizedName = displayName;
+		
+	}
+
+}
