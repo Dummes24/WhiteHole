@@ -1,6 +1,8 @@
 package cz.ProjectWhitehole.tileentity;
 
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import cz.ProjectWhitehole.Blocks.IndustrialRefinerIdle;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -14,6 +16,7 @@ import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.item.ItemTool;
+import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityIndustrialRefiner extends TileEntity implements ISidedInventory {
@@ -51,44 +54,80 @@ public class TileEntityIndustrialRefiner extends TileEntity implements ISidedInv
 	}
 
 	@Override
-	public ItemStack getStackInSlot(int p_70301_1_) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ItemStack decrStackSize(int p_70298_1_, int p_70298_2_) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public ItemStack getStackInSlotOnClosing(int p_70304_1_) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_) {
-		// TODO Auto-generated method stub
+	public ItemStack getStackInSlot(int i) {
 		
+		return this.slots[i];
+	}
+
+	@Override
+	public ItemStack decrStackSize(int i, int j) {
+        if (this.slots[i] != null)
+        {
+            ItemStack itemstack;
+
+            if (this.slots[i].stackSize <= j)
+            {
+                itemstack = this.slots[i];
+                this.slots[i] = null;
+                return itemstack;
+            }
+            else
+            {
+                itemstack = this.slots[i].splitStack(j);
+
+                if (this.slots[i].stackSize == 0)
+                {
+                    this.slots[i] = null;
+                }
+
+                return itemstack;
+            }
+        }
+        else
+        {
+            return null;
+        }
+	}
+
+	@Override
+	public ItemStack getStackInSlotOnClosing(int i) {
+		
+        if (this.slots[i] != null)
+        {
+            ItemStack itemstack = this.slots[i];
+            this.slots[i] = null;
+            return itemstack;
+        }
+        else
+        {
+            return null;
+        }
+	}
+
+	@Override
+	public void setInventorySlotContents(int i, ItemStack itemstack) {
+		
+        this.slots[i] = itemstack;
+
+        if (itemstack != null && itemstack.stackSize > this.getInventoryStackLimit())
+        {
+            itemstack.stackSize = this.getInventoryStackLimit();
+        }
 	}
 
 	@Override
 	public int getInventoryStackLimit() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 64;
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer p_70300_1_) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
+		// Almost impossible to get false
+		return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : entityplayer.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
 	}
 
 	@Override
 	public void openInventory() {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -146,6 +185,10 @@ public class TileEntityIndustrialRefiner extends TileEntity implements ISidedInv
 		}
 	}
 	
+	public boolean isBurning(){
+		return this.burnTime > 0;
+	}
+	
 	public void updateEntity() {
 		boolean flag = this.burnTime > 0;
 		boolean flag1 = false;
@@ -190,6 +233,46 @@ public class TileEntityIndustrialRefiner extends TileEntity implements ISidedInv
 		}
 
 	}
+	
+	public boolean canSmelt(){
+		
+		if(this.slots[0] == null){
+			return false;
+		}
+		else{
+			ItemStack itemstack = FurnaceRecipes.smelting().getSmeltingResult(this.slots[0]);
+			
+            if (itemstack == null) return false;
+            if (this.slots[2] == null) return true;
+            if (!this.slots[2].isItemEqual(itemstack)) return false;
+            int result = slots[2].stackSize + itemstack.stackSize;
+            return result <= getInventoryStackLimit() && result <= this.slots[2].getMaxStackSize();
+		}
+	}
+		
+	public void smeltItem()
+	{
+        if (this.canSmelt())
+        {
+            ItemStack itemstack = FurnaceRecipes.smelting().getSmeltingResult(this.slots[0]);
+
+            if (this.slots[2] == null)
+            {
+                this.slots[2] = itemstack.copy();
+            }
+            else if (this.slots[2].getItem() == itemstack.getItem())
+            {
+                this.slots[2].stackSize += itemstack.stackSize; // Forge BugFix: Results may have multiple items
+            }
+
+            this.slots[0].stackSize++;
+
+            if (this.slots[0].stackSize <= 0)
+            {
+                this.slots[0] = null;
+            }
+        }
+	}
 
 
 	@Override
@@ -207,5 +290,23 @@ public class TileEntityIndustrialRefiner extends TileEntity implements ISidedInv
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
 		return j != 0 || i != 1 || itemstack.getItem() == Items.bucket;
 	}
+	
+    @SideOnly(Side.CLIENT)
+    public int getBurnTimeRemainingScaled(int i)
+    {
+        if (this.currentItemBurnTime == 0)
+        {
+            this.currentItemBurnTime = this.furnaceSpeed;
+        }
+
+        return this.burnTime * i / this.currentItemBurnTime;
+    }
+    
+    @SideOnly(Side.CLIENT)
+    public int getCookProgressScaled(int i)
+    {
+        return this.cookTime * i / 200;
+    }
+
 
 }

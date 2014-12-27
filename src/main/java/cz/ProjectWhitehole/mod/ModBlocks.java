@@ -7,6 +7,7 @@ import cz.ProjectWhitehole.Blocks.Platinum;
 import cz.ProjectWhitehole.Blocks.Tin;
 import cz.ProjectWhitehole.Blocks.Uranium;
 import cz.ProjectWhitehole.Blocks.IndustrialRefinerIdle;
+import cz.ProjectWhitehole.Blocks.IndustrialRefinerActive;
 import net.minecraft.block.Block;
 import scala.tools.nsc.doc.model.Public;
 
@@ -21,6 +22,7 @@ public final class ModBlocks {
 	
 	//Machines
 	public static Block IndustrialRefinerIdle;
+	public static Block IndustrialRefinerActive;
 	
 	public static final int guiIDIndustrialRefiner = 0; 
 	
