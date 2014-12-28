@@ -27,7 +27,7 @@ public class GuiIndustrialRefiner extends GuiContainer{
 	}
 	
 	public void drawGuiContainerForegroundLayer(int par1, int par2) {
-		String name = this.industrialRefiner.hasCustomInventoryName() ? this.industrialRefiner.getInventoryName() : I18n.format(this.industrialRefiner.getInventoryName(), new Object[0]);
+		String name = "Industrial Refiner";
 		
 		this.fontRendererObj.drawString(name, this.xSize/2 - this.fontRendererObj.getStringWidth(name)/2,6,4210752);
 		this.fontRendererObj.drawString(I18n.format("container.inventory", new Object[0]),120, this.ySize - 96 + 2,4210752);

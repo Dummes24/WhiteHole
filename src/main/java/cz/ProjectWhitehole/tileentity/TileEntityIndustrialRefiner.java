@@ -3,7 +3,7 @@ package cz.ProjectWhitehole.tileentity;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import cz.ProjectWhitehole.Blocks.IndustrialRefinerIdle;
+import cz.ProjectWhitehole.Blocks.IndustrialRefiner;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
@@ -143,7 +143,7 @@ public class TileEntityIndustrialRefiner extends TileEntity implements ISidedInv
 	}
 	
 	public static boolean isItemFuel(ItemStack itemstack) {
-		return getItemBurnTime(itemstack) < 0;
+		return getItemBurnTime(itemstack) > 0;
 	}
 
 	private static int getItemBurnTime(ItemStack itemstack) {
@@ -225,7 +225,7 @@ public class TileEntityIndustrialRefiner extends TileEntity implements ISidedInv
 			
 			if(flag != this.isBurning()){
 				flag1 = true;
-				IndustrialRefinerIdle.updateIndustrialRefinerBlockState(this.burnTime > 0, this.worldObj, this.xCoord, this.yCoord, this.zCoord);		
+				IndustrialRefiner.updateIndustrialRefinerBlockState(this.burnTime > 0, this.worldObj, this.xCoord, this.yCoord, this.zCoord);		
 			}
 		}
 		if(flag1){

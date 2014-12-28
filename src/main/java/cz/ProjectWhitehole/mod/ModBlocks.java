@@ -1,15 +1,13 @@
 package cz.ProjectWhitehole.mod;
 
+import net.minecraft.block.Block;
 import cz.ProjectWhitehole.Blocks.Copper;
 import cz.ProjectWhitehole.Blocks.Eccdurusium;
 import cz.ProjectWhitehole.Blocks.Germanium;
+import cz.ProjectWhitehole.Blocks.IndustrialRefiner;
 import cz.ProjectWhitehole.Blocks.Platinum;
 import cz.ProjectWhitehole.Blocks.Tin;
 import cz.ProjectWhitehole.Blocks.Uranium;
-import cz.ProjectWhitehole.Blocks.IndustrialRefinerIdle;
-import cz.ProjectWhitehole.Blocks.IndustrialRefinerActive;
-import net.minecraft.block.Block;
-import scala.tools.nsc.doc.model.Public;
 
 public final class ModBlocks {
 	
@@ -36,6 +34,12 @@ public final class ModBlocks {
 		tinOre = new Tin();
 		
 		//Machines
-		IndustrialRefinerIdle = new IndustrialRefinerIdle(false);
+		IndustrialRefinerIdle = new IndustrialRefiner(false);
+		IndustrialRefinerActive = new IndustrialRefiner(true).setLightLevel(0.5F).setBlockName("IndsutrialRefinerActive");
+		
+		//Registering unimplemented Blocks
+		
+		
+		
 	}
 }

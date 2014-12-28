@@ -21,7 +21,7 @@ import cz.ProjectWhitehole.mod.ModBlocks;
 import cz.ProjectWhitehole.mod.ProjectWhiteholeMod;
 import cz.ProjectWhitehole.tileentity.TileEntityIndustrialRefiner;
 
-public final class IndustrialRefinerIdle extends BlockContainer{
+public final class IndustrialRefiner extends BlockContainer{
 	
 	public String name = "IndustrialRefiner";
 	private final boolean isActive;
@@ -34,7 +34,7 @@ public final class IndustrialRefinerIdle extends BlockContainer{
 	
 	private static boolean keepInventory;
 	
-	public IndustrialRefinerIdle(boolean isActive)
+	public IndustrialRefiner(boolean isActive)
 	{
 		super(Material.iron);
 		this.setBlockName(ProjectWhiteholeMod.MODID + "_" + name);
@@ -164,7 +164,7 @@ public final class IndustrialRefinerIdle extends BlockContainer{
 			keepInventory = true;
 			
 			if(active){
-				worldObj.setBlock(xCoord,yCoord,zCoord,ModBlocks.IndustrialRefinerActive);
+				worldObj.setBlock(xCoord,yCoord,zCoord,ModBlocks.IndustrialRefinerIdle);
 			}
 			else{
 				worldObj.setBlock(xCoord,yCoord,zCoord,ModBlocks.IndustrialRefinerIdle);
