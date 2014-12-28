@@ -17,6 +17,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.item.ItemTool;
 import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityIndustrialRefiner extends TileEntity implements ISidedInventory {
@@ -265,7 +267,7 @@ public class TileEntityIndustrialRefiner extends TileEntity implements ISidedInv
                 this.slots[2].stackSize += itemstack.stackSize; // Forge BugFix: Results may have multiple items
             }
 
-            this.slots[0].stackSize++;
+            this.slots[0].stackSize--;
 
             if (this.slots[0].stackSize <= 0)
             {
@@ -305,8 +307,61 @@ public class TileEntityIndustrialRefiner extends TileEntity implements ISidedInv
     @SideOnly(Side.CLIENT)
     public int getCookProgressScaled(int i)
     {
-        return this.cookTime * i / 200;
+        return this.cookTime * i / 100;
     }
+    
+    public void writeToNBT(NBTTagCompound save)
+    {
+        super.writeToNBT(save);
+        save.setShort("BurnTime", (short)this.burnTime);
+        save.setShort("CookTime", (short)this.cookTime);
+        NBTTagList nbttaglist = new NBTTagList();
+
+        for (int i = 0; i < this.slots.length; ++i)
+        {
+            if (this.slots[i] != null)
+            {
+                NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+                nbttagcompound1.setByte("Slot", (byte)i);
+                this.slots[i].writeToNBT(nbttagcompound1);
+                nbttaglist.appendTag(nbttagcompound1);
+            }
+        }
+
+        save.setTag("Items", nbttaglist);
+
+        if (this.hasCustomInventoryName())
+        {
+            save.setString("CustomName", this.localizedName);
+        }
+    }
+    
+    public void readFromNBT(NBTTagCompound nbt)
+    {
+        super.readFromNBT(nbt);
+        NBTTagList nbttaglist = nbt.getTagList("Items", 10);
+        this.slots = new ItemStack[this.getSizeInventory()];
+
+        for (int i = 0; i < nbttaglist.tagCount(); ++i)
+        {
+            NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
+            byte b0 = nbttagcompound1.getByte("Slot");
+
+            if (b0 >= 0 && b0 < this.slots.length)
+            {
+                this.slots[b0] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+            }
+        }
+        this.burnTime = (int)nbt.getShort("BurnTime");
+        this.cookTime = (int)nbt.getShort("CookTime");
+        this.currentItemBurnTime = getItemBurnTime(this.slots[1]);
+
+        if (nbt.hasKey("CustomName", 8))
+        {
+            this.localizedName = nbt.getString("CustomName");
+        }
+    }
+    
 
 
 }

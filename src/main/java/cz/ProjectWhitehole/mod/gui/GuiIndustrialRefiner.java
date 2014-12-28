@@ -40,17 +40,20 @@ public class GuiIndustrialRefiner extends GuiContainer{
 	
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.getTextureManager().bindTexture(bground);
-        int k = (this.width - this.xSize) / 2;
-        int l = (this.height - this.ySize) / 2;
-        this.drawTexturedModalRect(k, l, 0, 0, xSize, ySize);
+        this.drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
         if (this.industrialRefiner.isBurning())
         {
-            int i1 = this.industrialRefiner.getBurnTimeRemainingScaled(13);
-            this.drawTexturedModalRect(k + 56, l + 36 + 12 - i1, 176, 12 - i1, 14, i1 + 1);
-            i1 = this.industrialRefiner.getCookProgressScaled(24);
-            this.drawTexturedModalRect(k + 79, l + 34, 176, 14, i1 + 1, 16);
+            int i1 = this.industrialRefiner.getBurnTimeRemainingScaled(40);
+            int j = 40 - i1;
+            this.drawTexturedModalRect(guiLeft + 29, guiTop + 65,176,0,40-j,10);
+
         }
+        
+        int k;
+        
+        k = this.industrialRefiner.getCookProgressScaled(24);
+        this.drawTexturedModalRect(guiLeft + 79, guiTop + 34, 176, 10, k + 1, 17);
         
         
 		

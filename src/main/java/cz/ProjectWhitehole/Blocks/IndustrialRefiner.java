@@ -1,5 +1,7 @@
 package cz.ProjectWhitehole.Blocks;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -42,8 +44,7 @@ public final class IndustrialRefiner extends BlockContainer{
 		this.setStepSound(soundTypeMetal);
 		this.setHardness(3.0f);
 		this.setHarvestLevel("pickaxe", 2);
-		this.isActive = isActive;
-		GameRegistry.registerBlock(this, name);		
+		this.isActive = isActive;	
 		
 	}
 
@@ -125,7 +126,41 @@ public final class IndustrialRefiner extends BlockContainer{
 			return new TileEntityIndustrialRefiner();
 		}
 		
-		//TODO randomDisplayTick
+	    @SideOnly(Side.CLIENT)
+	    public void randomDisplayTick(World world, int x, int y, int z, Random generator)
+	    {
+	        if (this.isActive)
+	        {
+	            int direction = world.getBlockMetadata(x, y, z);
+	            float x1 = (float)x + 0.5F;
+	            float x2 = (float)y + 0.3F + generator.nextFloat() * 6.0F / 16.0F;
+	            float x3 = (float)z + 0.5F;
+	            
+	            float f1 = 0.52F;
+	            float f2 = generator.nextFloat() * 0.6F - 0.3F;
+
+	            if (direction == 4)
+	            {
+	                world.spawnParticle("smoke", (double)(x1 - f1), (double)x2, (double)(x3 + f2), 0.0D, 0.0D, 0.0D);
+	                world.spawnParticle("flame", (double)(x1 - f1), (double)x2, (double)(x3 + f2), 0.0D, 0.0D, 0.0D);
+	            }
+	            else if (direction == 5)
+	            {
+	                world.spawnParticle("smoke", (double)(x1 + f1), (double)x2, (double)(x3 + f2), 0.0D, 0.0D, 0.0D);
+	                world.spawnParticle("flame", (double)(x1 + f1), (double)x2, (double)(x3 + f2), 0.0D, 0.0D, 0.0D);
+	            }
+	            else if (direction == 2)
+	            {
+	                world.spawnParticle("smoke", (double)(x1 + f2), (double)x2, (double)(x3 - f1), 0.0D, 0.0D, 0.0D);
+	                world.spawnParticle("flame", (double)(x1 + f2), (double)x2, (double)(x3 - f1), 0.0D, 0.0D, 0.0D);
+	            }
+	            else if (direction == 3)
+	            {
+	                world.spawnParticle("smoke", (double)(x1 + f2), (double)x2, (double)(x3 + f1), 0.0D, 0.0D, 0.0D);
+	                world.spawnParticle("flame", (double)(x1 + f2), (double)x2, (double)(x3 + f1), 0.0D, 0.0D, 0.0D);
+	            }
+	        }
+	    }
 		
 		public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityPlayer, ItemStack itemstack) {
 			
@@ -164,7 +199,7 @@ public final class IndustrialRefiner extends BlockContainer{
 			keepInventory = true;
 			
 			if(active){
-				worldObj.setBlock(xCoord,yCoord,zCoord,ModBlocks.IndustrialRefinerIdle);
+				worldObj.setBlock(xCoord,yCoord,zCoord,ModBlocks.IndustrialRefinerActive);
 			}
 			else{
 				worldObj.setBlock(xCoord,yCoord,zCoord,ModBlocks.IndustrialRefinerIdle);
