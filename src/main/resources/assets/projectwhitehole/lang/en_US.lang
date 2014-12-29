@@ -1,2 +1,13 @@
 tile.projectwhitehole_copperOre.name=Copper Ore
+tile.projectwhitehole_eccdurusiumOre.name=Eccdurusium Ore
+tile.projectwhitehole_germaniumOre.name=Germanium Ore
+tile.projectwhitehole_platinumOre.name=Platinum Ore
+tile.projectwhitehole_uraniumOre.name=Uranium Ore
+tile.projectwhitehole_tinOre.name=Tin Ore
+item.projectwhitehole_bronzeIngot.name=Bronze Ingot
 item.projectwhitehole_copperIngot.name=Copper Ingot
+item.projectwhitehole_eccdurusiumIngot.name=Eccdurusium Ingot
+item.projectwhitehole_germaniumIngot.name=Germanium Ingot
+item.projectwhitehole_platinumIngot.name=Platinum Ingot
+item.projectwhitehole_tinIngot.name=Tin Ingot
+item.projectwhitehole_uraniumIngot.name=Uranium Ingot

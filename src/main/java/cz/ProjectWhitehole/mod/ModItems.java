@@ -1,6 +1,6 @@
 package cz.ProjectWhitehole.mod;
 
-import cz.ProjectWhitehole.Blocks.Copper;
+import cz.ProjectWhitehole.Blocks.CopperOre;
 import cz.ProjectWhitehole.items.CopperIngot;
 import net.minecraft.item.Item;
 
