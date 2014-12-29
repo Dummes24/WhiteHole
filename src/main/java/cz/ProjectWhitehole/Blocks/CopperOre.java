@@ -15,12 +15,12 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.IIcon;
 
-public final class Copper extends Block{
+public final class CopperOre extends Block{
 	
 	public String name = "copperOre";
 	private IIcon[] icons = new IIcon[6];
 	
-	public Copper()
+	public CopperOre()
 	{
 		super(Material.rock);
 		this.setBlockName(ProjectWhiteholeMod.MODID + "_" + name);
