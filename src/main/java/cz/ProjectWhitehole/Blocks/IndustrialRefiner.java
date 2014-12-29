@@ -8,10 +8,14 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -35,12 +39,12 @@ public final class IndustrialRefiner extends BlockContainer{
 	private IIcon iconFront;
 	
 	private static boolean keepInventory;
+	private Random rand = new Random();
 	
 	public IndustrialRefiner(boolean isActive)
 	{
 		super(Material.iron);
 		this.setBlockName(ProjectWhiteholeMod.MODID + "_" + name);
-		this.setCreativeTab(CreativeTabs.tabBlock);
 		this.setStepSound(soundTypeMetal);
 		this.setHardness(3.0f);
 		this.setHarvestLevel("pickaxe", 2);
@@ -70,7 +74,7 @@ public final class IndustrialRefiner extends BlockContainer{
 			
 		}
 		
-		public Item getItemDropped(World world, int x, int y, int z) {
+		public Item getItemDropped(int i, Random random, int j) {
 			
 			return Item.getItemFromBlock(ModBlocks.IndustrialRefinerIdle);
 		}
@@ -215,4 +219,61 @@ public final class IndustrialRefiner extends BlockContainer{
 	            worldObj.setTileEntity(xCoord, yCoord, zCoord, tileentity);
 	        }
 		}
+		
+		   public void breakBlock(World world, int x, int y, int z, Block block, int oldMeta)
+		   {
+		        if (!keepInventory)
+		        {
+		            TileEntityIndustrialRefiner tileentity = (TileEntityIndustrialRefiner)world.getTileEntity(x, y, z);
+
+		            if (tileentity != null)
+		            {
+		                for (int i = 0; i < tileentity.getSizeInventory(); ++i)
+		                {
+		                    ItemStack itemstack = tileentity.getStackInSlot(i);
+
+		                    if (itemstack != null)
+		                    {
+		                        float f = this.rand.nextFloat() * 0.8F + 0.1F;
+		                        float f1 = this.rand.nextFloat() * 0.8F + 0.1F;
+		                        float f2 = this.rand.nextFloat() * 0.8F + 0.1F;
+
+		                        while (itemstack.stackSize > 0)
+		                        {
+		                            int j = this.rand.nextInt(21) + 10;
+
+		                            if (j > itemstack.stackSize)
+		                            {
+		                                j = itemstack.stackSize;
+		                            }
+
+		                            itemstack.stackSize -= j;
+		                            EntityItem entityitem = new EntityItem(world, (double)((float)x + f), (double)((float)y + f1), (double)((float)z + f2), new ItemStack(itemstack.getItem(), j, itemstack.getItemDamage()));
+
+		                            if (itemstack.hasTagCompound())
+		                            {
+		                                entityitem.getEntityItem().setTagCompound((NBTTagCompound)itemstack.getTagCompound().copy());
+		                            }
+
+		                            float f3 = 0.05F;
+		                            entityitem.motionX = (double)((float)this.rand.nextGaussian() * f3);
+		                            entityitem.motionY = (double)((float)this.rand.nextGaussian() * f3 + 0.2F);
+		                            entityitem.motionZ = (double)((float)this.rand.nextGaussian() * f3);
+		                            world.spawnEntityInWorld(entityitem);
+		                        }
+		                    }
+		                }
+
+		                world.func_147453_f(x, y, z, block);
+		            }
+		        }
+
+		        super.breakBlock(world, x, y, z, block, oldMeta);
+		    }
+		   
+		    @SideOnly(Side.CLIENT)
+		    public Item getItem(World world, int x, int y, int z)
+		    {
+		        return Item.getItemFromBlock(ModBlocks.IndustrialRefinerIdle);
+		    }
 }

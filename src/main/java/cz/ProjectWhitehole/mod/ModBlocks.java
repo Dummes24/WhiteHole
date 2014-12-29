@@ -2,6 +2,7 @@ package cz.ProjectWhitehole.mod;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
+import net.minecraft.creativetab.CreativeTabs;
 import cz.ProjectWhitehole.Blocks.Copper;
 import cz.ProjectWhitehole.Blocks.Eccdurusium;
 import cz.ProjectWhitehole.Blocks.Germanium;
@@ -35,7 +36,7 @@ public final class ModBlocks {
 		tinOre = new Tin();
 		
 		//Machines
-		IndustrialRefinerIdle = new IndustrialRefiner(false);
+		IndustrialRefinerIdle = new IndustrialRefiner(false).setCreativeTab(CreativeTabs.tabBlock);
 		IndustrialRefinerActive = new IndustrialRefiner(true).setLightLevel(0.5F);
 		
 		//Registering unimplemented Blocks
