@@ -44,8 +44,7 @@ public class ProjectWhiteholeMod {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
     	ModBlocks.init();
-    	ModItems.init();
-    	
+    	ModItems.init();    	
     	GameRegistry.registerTileEntity(TileEntityIndustrialRefiner.class, "IndustrialRefiner");
     	
     }
@@ -53,7 +52,7 @@ public class ProjectWhiteholeMod {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
     	ModSmelting.init();
-    	
+    	ModCrafting.init();
     	NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
     }
  
