@@ -7,7 +7,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 
 public final class PlatinumOre extends Block{
-	private String name = "platinum";
+	private String name = "platinumOre";
 	
 	public PlatinumOre()
 	{
@@ -17,6 +17,7 @@ public final class PlatinumOre extends Block{
 		this.setStepSound(soundTypeStone);
 		this.setHardness(3.0f);
 		this.setHarvestLevel("pickaxe", 2);
+		setBlockTextureName(ProjectWhiteholeMod.MODID + ":" + name);
 		GameRegistry.registerBlock(this, name);
 	}
 }

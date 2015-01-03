@@ -8,7 +8,7 @@ import cz.ProjectWhitehole.mod.ProjectWhiteholeMod;
 
 public final class GermaniumOre extends Block{
 
-	private String name = "germanium";
+	private String name = "germaniumOre";
 	
 	public GermaniumOre()
 	{
@@ -18,6 +18,7 @@ public final class GermaniumOre extends Block{
 		this.setStepSound(soundTypeStone);
 		this.setHardness(3.0f);
 		this.setHarvestLevel("pickaxe", 2);
+		setBlockTextureName(ProjectWhiteholeMod.MODID + ":" + name);
 		GameRegistry.registerBlock(this, name);
 	}
 }

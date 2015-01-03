@@ -8,7 +8,7 @@ import cz.ProjectWhitehole.mod.ProjectWhiteholeMod;
 
 public final class UraniumOre extends Block{
 
-	private String name = "uranium";
+	private String name = "uraniumOre";
 	
 	public UraniumOre()
 	{
@@ -18,6 +18,7 @@ public final class UraniumOre extends Block{
 		this.setStepSound(soundTypeStone);
 		this.setHardness(3.0f);
 		this.setHarvestLevel("pickaxe", 2);
+		setBlockTextureName(ProjectWhiteholeMod.MODID + ":" + name);
 		GameRegistry.registerBlock(this, name);
 	}
 }

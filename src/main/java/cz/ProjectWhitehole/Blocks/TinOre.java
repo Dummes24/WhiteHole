@@ -8,7 +8,7 @@ import net.minecraft.creativetab.CreativeTabs;
 
 public final class TinOre extends Block{
 	
-	private String name = "tin";
+	private String name = "tinOre";
 	
 	public TinOre() {
 		super(Material.rock);
@@ -17,6 +17,7 @@ public final class TinOre extends Block{
 		this.setStepSound(soundTypeStone);
 		this.setHardness(3.0f);
 		this.setHarvestLevel("pickaxe", 2);
+		setBlockTextureName(ProjectWhiteholeMod.MODID + ":" + name);
 		GameRegistry.registerBlock(this, name);
 	}
 }

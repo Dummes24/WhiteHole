@@ -17,7 +17,7 @@ import net.minecraft.init.Blocks;
 
 public class EccdurusiumOre extends Block{
 	
-	private String name = "Eccdurusium";
+	private String name = "eccdurusiumOre";
 	
 	public EccdurusiumOre()
 	{
@@ -27,7 +27,7 @@ public class EccdurusiumOre extends Block{
 		this.setStepSound(soundTypeStone);
 		this.setHardness(3.0f);
 		this.setHarvestLevel("pickaxe", 2);
-		this.setBlockTextureName(ProjectWhiteholeMod.MODID+"_"+ this.getUnlocalizedName().substring(5));
+		this.setBlockTextureName(ProjectWhiteholeMod.MODID + ":" + name);
 		GameRegistry.registerBlock(this, name);
 		
 	}
