@@ -32,10 +32,8 @@ public class ProjectWhiteholeMod {
 		}
 	};
 	
-	public static CreativeTabs tabWhiteHoleMaterials = new CreativeTabs("WhiteHoleMaterials"){
-		
-		@SideOnly(Side.CLIENT)
-		
+	public static CreativeTabs tabWhiteHoleMaterials = new CreativeTabs("WhiteHoleMaterials"){		
+		@SideOnly(Side.CLIENT)		
 		public Item getTabIconItem(){
 			return Item.getItemFromBlock(Blocks.brick_block);
 		}
