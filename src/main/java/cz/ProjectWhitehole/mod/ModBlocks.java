@@ -24,7 +24,8 @@ public final class ModBlocks {
 	public static Block IndustrialRefinerIdle;
 	public static Block IndustrialRefinerActive;
 	
-	public static final int guiIDIndustrialRefiner = 0; 
+	public static final int guiIDIndustrialRefiner = 0;
+	public static final int guiIDGenerator = 1; 
 	
 	public static void init()
 	{
