@@ -50,7 +50,7 @@ public class ProjectWhiteholeMod {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
     	ModSmelting.init();
-    	ModCrafting.init();
+    	//ModCrafting.init();
     	NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
     }
  

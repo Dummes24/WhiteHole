@@ -15,7 +15,5 @@ public final class CopperIngot extends Item{
   		setCreativeTab(CreativeTabs.tabMaterials);
   		GameRegistry.registerItem(this, name);
   		setTextureName(ProjectWhiteholeMod.MODID +":"+name);
-  		//Is git working #Random update for testing git
-  		//No more work?
   	}
 }
