@@ -6,7 +6,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cz.ProjectWhitehole.mod.ProjectWhiteholeMod;
 
 public class UraniumIngot extends Item {
-	private String name = "platinumIngot";
+	private String name = "uraniumIngot";
   	public UraniumIngot(){
   		
   		setUnlocalizedName(ProjectWhiteholeMod.MODID +"_" + name);
