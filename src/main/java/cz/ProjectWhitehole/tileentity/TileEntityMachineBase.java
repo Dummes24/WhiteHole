@@ -1,7 +1,5 @@
 package cz.ProjectWhitehole.tileentity;
 
-import cofh.api.energy.IEnergyHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,28 +8,17 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemTool;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
+import net.minecraft.item.ItemTool;
+import cofh.api.energy.TileEnergyHandler;
+import cpw.mods.fml.common.registry.GameRegistry;
 
-public class TileEntityGeneratorTest extends TileEntity implements ISidedInventory, IEnergyHandler{
-		
-	private ItemStack[] slots = new ItemStack[3];
+public class TileEntityMachineBase extends TileEnergyHandler implements ISidedInventory{
+
+	private ItemStack[] slots;
 	private String localizedName; 
-	
-	//Energy
-	protected int energy;
-	private int maxEnergy;
-	
-	public void setGuiDisplayName(String displayName) {
-		
-		this.localizedName = displayName;
-		
-	}
 	
 	@Override
 	public int getSizeInventory() {
@@ -65,14 +52,6 @@ public class TileEntityGeneratorTest extends TileEntity implements ISidedInvento
 		else {
 			return null;
 		}
-		
-	}
-	
-	@Override
-	public void updateEntity() {
-		if (this.worldObj != null && !this.worldObj.isRemote){
-			
-		}
 	}
 
 	@Override
@@ -88,16 +67,16 @@ public class TileEntityGeneratorTest extends TileEntity implements ISidedInvento
 	            return null;
 	        }
 	}
+	
 
 	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		this.slots[i] = itemstack;
+	public void setInventorySlotContents(int i, ItemStack itemStack) {
+		this.slots[i] = itemStack;
 
-        if (itemstack != null && itemstack.stackSize > this.getInventoryStackLimit())
+        if (itemStack != null && itemStack.stackSize > this.getInventoryStackLimit())
         {
-            itemstack.stackSize = this.getInventoryStackLimit();
-        }
-		
+            itemStack.stackSize = this.getInventoryStackLimit();
+        }		
 	}
 
 	@Override
@@ -116,8 +95,8 @@ public class TileEntityGeneratorTest extends TileEntity implements ISidedInvento
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : entityplayer.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
+	public boolean isUseableByPlayer(EntityPlayer entityPlayer) {
+		return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : entityPlayer.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
 	}
 
 	@Override
@@ -133,19 +112,20 @@ public class TileEntityGeneratorTest extends TileEntity implements ISidedInvento
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		return i== 2 ? false : (i==1 ? isItemFuel(itemstack) : true);
+	public boolean isItemValidForSlot(int i, ItemStack itemStack) {
+		return i== 2 ? false : (i==1 ? isItemFuel(itemStack) : true);
 	}
 	
 	public static boolean isItemFuel(ItemStack itemstack) {
 		return getItemBurnTime(itemstack) > 0;
 	}
 	
-		private static int getItemBurnTime(ItemStack itemstack) {
+	private static int getItemBurnTime(ItemStack itemstack) {
 		
 		if(itemstack == null) {
 			return 0;
-		}else{
+		}
+		else{
 			Item item = itemstack.getItem();
 			
 			if(item instanceof ItemBlock && Block.getBlockFromItem(item) != Blocks.air){
@@ -181,58 +161,20 @@ public class TileEntityGeneratorTest extends TileEntity implements ISidedInvento
 	}
 
 	@Override
-	public boolean canConnectEnergy(ForgeDirection from) {
-		return true;
-	}
-
-	@Override
-	public int receiveEnergy(ForgeDirection from, int maxReceive,boolean simulate) {
-		int energyRecieved = maxReceive;
-		if (energyRecieved > maxEnergy - energy)
-			energyRecieved = maxReceive - energy;
-		if (!simulate)
-			energy += energyRecieved;
-		return energyRecieved;
-	}
-
-	@Override
-	public int extractEnergy(ForgeDirection from, int maxExtract,boolean simulate) {
-		int extractedEnergy = maxExtract;
-		if (extractedEnergy > energy) {
-			extractedEnergy = energy;
-		}
-		if (!simulate) {
-			energy -= extractedEnergy;
-		}
-		return extractedEnergy;
-	}
-
-	@Override
-	public int getEnergyStored(ForgeDirection from) {		
-		return energy;
-	}
-
-	@Override
-	public int getMaxEnergyStored(ForgeDirection from) {
-		return maxEnergy;
-	}
-	
-
-	@Override
-	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		return j != 0 || i != 1 || itemstack.getItem() == Items.bucket;
-	}
-
-	@Override
-	public boolean canExtractItem(int p_102008_1_, ItemStack p_102008_2_,
-			int p_102008_3_) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public int[] getAccessibleSlotsFromSide(int var1) {
 		return var1 == 0 ? new int[]{2,1} : (var1 == 1 ? new int[]{0} : new int[]{1});
+	}
+
+	@Override
+	public boolean canInsertItem(int i, ItemStack itemStack,
+			int j) {
+		return this.isItemValidForSlot(i, itemStack);
+	}
+
+	@Override
+	public boolean canExtractItem(int i, ItemStack itemStack,
+			int j) {
+		return j != 0 || i != 1 || itemStack.getItem() == Items.bucket;
 	}
 
 }
