@@ -15,9 +15,10 @@ import net.minecraft.item.ItemTool;
 import cofh.api.energy.TileEnergyHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 
+//Asi pøejmenovat je to divný
 public class TileEntityMachineBase extends TileEnergyHandler implements ISidedInventory{
 
-	private ItemStack[] slots;
+	protected ItemStack[] slots;
 	private String localizedName; 
 	
 	@Override
