@@ -43,8 +43,7 @@ public class GuiHandler implements IGuiHandler {
 	}
 
 	@Override
-	public Object getClientGuiElement(int ID, EntityPlayer player, World world,
-			int x, int y, int z) {
+	public Object getClientGuiElement(int ID, EntityPlayer player, World world,int x, int y, int z) {
 		TileEntity entity = world.getTileEntity(x, y, z);
 		
 		if(entity != null ){
@@ -58,7 +57,7 @@ public class GuiHandler implements IGuiHandler {
 				return null;
 				
 				case ModBlocks.guiIDGenerator:
-				if(entity instanceof TileEntityIndustrialRefiner) {
+				if(entity instanceof TileEntityGenerator) {
 					return new GuiGenerator(player.inventory, (TileEntityGenerator)entity);
 				}
 				return null;

@@ -42,7 +42,8 @@ public class TileEntityIndustrialRefiner extends TileEntity implements ISidedInv
 	}
 	
 	public String getInventoryName() {
-		return this.hasCustomInventoryName() ? this.localizedName : "container.industrialRefiner";		
+		return this.hasCustomInventoryName() ? this.localizedName : "container.industrialRefiner";
+		
 	}
 
 	public boolean hasCustomInventoryName() {

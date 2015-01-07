@@ -19,7 +19,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public class TileEntityMachineBase extends TileEnergyHandler implements ISidedInventory{
 
 	protected ItemStack[] slots;
-	private String localizedName; 
+	protected String localizedName; 
 	
 	@Override
 	public int getSizeInventory() {
@@ -120,8 +120,7 @@ public class TileEntityMachineBase extends TileEnergyHandler implements ISidedIn
 	public static boolean isItemFuel(ItemStack itemstack) {
 		return getItemBurnTime(itemstack) > 0;
 	}
-	
-	private static int getItemBurnTime(ItemStack itemstack) {
+	protected static int getItemBurnTime(ItemStack itemstack) {
 		
 		if(itemstack == null) {
 			return 0;

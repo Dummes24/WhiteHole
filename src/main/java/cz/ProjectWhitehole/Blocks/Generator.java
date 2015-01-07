@@ -63,15 +63,16 @@ public class Generator extends BlockContainer{
 			return this.iconFront;
 	   	}
 		else
+			
 		{
 				return side == 1 ? this.iconTop : (side == 0 ? this.iconTop : (side != meta ? this.blockIcon : this.iconFront));
 		}
 		
 	}
-
-	@Override
-	public TileEntity createNewTileEntity(World world, int i) {
-		return new TileEntityGenerator();
+	
+	public Item getItemDropped(int i, Random random, int j) {
+		
+		return Item.getItemFromBlock(ModBlocks.generatorIdleBlock);
 	}
 	
 	public void onBlockAdded(World world, int x, int y, int z) {
@@ -115,6 +116,51 @@ public class Generator extends BlockContainer{
 		}
 		return true;
 	}
+
+	public String returnName(){
+		return name;
+	}
+
+	@Override
+	public TileEntity createNewTileEntity(World world, int i ) {
+		return new TileEntityGenerator();
+	}
+	
+    @SideOnly(Side.CLIENT)
+    public void randomDisplayTick(World world, int x, int y, int z, Random randGenerator)
+    {
+        if (this.isActive)
+        {
+            int direction = world.getBlockMetadata(x, y, z);
+            float x1 = (float)x + 0.5F;
+            float x2 = (float)y + 0.3F + randGenerator.nextFloat() * 6.0F / 16.0F;
+            float x3 = (float)z + 0.5F;
+            
+            float f1 = 0.52F;
+            float f2 = randGenerator.nextFloat() * 0.6F - 0.3F;
+
+            if (direction == 4)
+            {
+                world.spawnParticle("smoke", (double)(x1 - f1), (double)x2, (double)(x3 + f2), 0.0D, 0.0D, 0.0D);
+                world.spawnParticle("flame", (double)(x1 - f1), (double)x2, (double)(x3 + f2), 0.0D, 0.0D, 0.0D);
+            }
+            else if (direction == 5)
+            {
+                world.spawnParticle("smoke", (double)(x1 + f1), (double)x2, (double)(x3 + f2), 0.0D, 0.0D, 0.0D);
+                world.spawnParticle("flame", (double)(x1 + f1), (double)x2, (double)(x3 + f2), 0.0D, 0.0D, 0.0D);
+            }
+            else if (direction == 2)
+            {
+                world.spawnParticle("smoke", (double)(x1 + f2), (double)x2, (double)(x3 - f1), 0.0D, 0.0D, 0.0D);
+                world.spawnParticle("flame", (double)(x1 + f2), (double)x2, (double)(x3 - f1), 0.0D, 0.0D, 0.0D);
+            }
+            else if (direction == 3)
+            {
+                world.spawnParticle("smoke", (double)(x1 + f2), (double)x2, (double)(x3 + f1), 0.0D, 0.0D, 0.0D);
+                world.spawnParticle("flame", (double)(x1 + f2), (double)x2, (double)(x3 + f1), 0.0D, 0.0D, 0.0D);
+            }
+        }
+    }
 	
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entityPlayer, ItemStack itemstack) {
 		
@@ -141,10 +187,10 @@ public class Generator extends BlockContainer{
 		}
 		
 		if(itemstack.hasDisplayName()) {
-			((TileEntityGenerator)world.getTileEntity(x,y,z)).setGuiDisplayName(itemstack.getDisplayName());
+			((TileEntityIndustrialRefiner)world.getTileEntity(x,y,z)).setGuiDisplayName(itemstack.getDisplayName());
 		}
 	}
-	
+
 	public static void updateGeneratorBlockState(boolean active, World worldObj, int xCoord, int yCoord, int zCoord) {
 		
 		int i = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
@@ -169,8 +215,8 @@ public class Generator extends BlockContainer{
             worldObj.setTileEntity(xCoord, yCoord, zCoord, tileentity);
         }
 	}
-
-	public void breakBlock(World world, int x, int y, int z, Block block, int oldMeta)
+	
+	   public void breakBlock(World world, int x, int y, int z, Block block, int oldMeta)
 	   {
 	        if (!keepInventory)
 	        {
@@ -220,15 +266,11 @@ public class Generator extends BlockContainer{
 
 	        super.breakBlock(world, x, y, z, block, oldMeta);
 	    }
-	
-	@SideOnly(Side.CLIENT)
-    public Item getItem(World world, int x, int y, int z)
-    {
-        return Item.getItemFromBlock(ModBlocks.IndustrialRefinerIdle);
-    }	   
-
-	public String returnName(){
-		return name;
-	}
+	   
+	    @SideOnly(Side.CLIENT)
+	    public Item getItem(World world, int x, int y, int z)
+	    {
+	        return Item.getItemFromBlock(ModBlocks.generatorIdleBlock);
+	    }
 
 }

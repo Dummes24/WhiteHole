@@ -5,6 +5,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -13,17 +14,25 @@ import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.item.ItemTool;
+import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.ForgeDirection;
+import cz.ProjectWhitehole.Blocks.Generator;
 import cz.ProjectWhitehole.tileentity.TileEntityMachineBase;
 
 public class TileEntityGenerator extends TileEntityMachineBase{
 	
 	public int burnTime = 0;
-	private String localizedName;
 	public int currentItemBurnTime = 0;
-	public int furnaceSpeed = 100; 
+	public int furnaceSpeed = 100;
+	private int cookTime; 
 	
-	public TileEntityGenerator() {
+	private static final int[] slots_top = new int[]{0};
+	private static final int[] slots_bottom = new int[]{2,1};
+	private static final int[] slots_side = new int[]{1};
+	
+	public TileEntityGenerator(){
 		slots = new ItemStack[2];
 	}
 	
@@ -33,79 +42,75 @@ public class TileEntityGenerator extends TileEntityMachineBase{
 		
 	}
 	
-	public Boolean isBurning(){
-		return burnTime > 0;
+	public boolean isBurning(){
+		return this.burnTime > 0;
 	}
-	
-	public String getInventoryName() {
-		return this.hasCustomInventoryName() ? this.localizedName : "container.generator";		
-	}
-	
-	public boolean hasCustomInventoryName() {
-		
-		return this.localizedName != null && this.localizedName.length() > 0  ;
-	}
-	
-	public int getSizeInventory() {
-		return  this.slots.length;
-	}
+
 		
 	public void updateEntity(){
 		boolean flag = this.burnTime > 0;
+		
+		//Burn energy and add energy 
 		if (this.burnTime > 0) {
 			this.burnTime--;
+			this.storage.modifyEnergyStored(100);
 		}
+		
+		//If whole 1 fuel was burnt if available burn next fuel, update block itself
 		if (!this.worldObj.isRemote) {
 			if (burnTime == 0 && slots[0] != null){
-				burnTime = getItemBurnTime(slots[1]);
-				if (slots[0] != null) {
-					this.slots[0].stackSize--;
-				}
+				burnTime = getItemBurnTime(slots[0]);				
+				this.slots[0].stackSize--;
 			}
+			if (this.isBurning()) {
+				Generator.updateGeneratorBlockState(burnTime > 0, this.worldObj,this.xCoord,this.yCoord,this.zCoord);
+			}
+		}
 			if ((burnTime > 0) != flag) {
 				//Update industrial furnace
 				this.markDirty();
 			}
-		}
+				
 	}
 	
-	private static int getItemBurnTime(ItemStack itemstack) {
+	public boolean canSmelt(){
 		
-		if(itemstack == null) {
-			return 0;
-		}else{
-			Item item = itemstack.getItem();
+		if(this.slots[0] == null){
+			return false;
+		}
+		else{
+			ItemStack itemstack = FurnaceRecipes.smelting().getSmeltingResult(this.slots[0]);
 			
-			if(item instanceof ItemBlock && Block.getBlockFromItem(item) != Blocks.air){
-				
-				Block block = Block.getBlockFromItem(item);
-				
-                if (block == Blocks.wooden_slab)
-                {
-                    return 150;
-                }
+            if (itemstack == null) return false;
+            if (this.slots[2] == null) return true;
+            if (!this.slots[2].isItemEqual(itemstack)) return false;
+            int result = slots[2].stackSize + itemstack.stackSize;
+            return result <= getInventoryStackLimit() && result <= this.slots[2].getMaxStackSize();
+		}
+	}
+		
+	public void smeltItem()
+	{
+        if (this.canSmelt())
+        {
+            ItemStack itemstack = FurnaceRecipes.smelting().getSmeltingResult(this.slots[0]);
 
-                if (block.getMaterial() == Material.wood)
-                {
-                    return 300;
-                }
-
-                if (block == Blocks.coal_block)
-                {
-                    return 16000;
-                }
+            if (this.slots[2] == null)
+            {
+                this.slots[2] = itemstack.copy();
+            }
+            else if (this.slots[2].getItem() == itemstack.getItem())
+            {
+                this.slots[2].stackSize += itemstack.stackSize; // Forge BugFix: Results may have multiple items
             }
 
-            if (item instanceof ItemTool && ((ItemTool)item).getToolMaterialName().equals("WOOD")) return 200;
-            if (item instanceof ItemSword && ((ItemSword)item).getToolMaterialName().equals("WOOD")) return 200;
-            if (item instanceof ItemHoe && ((ItemHoe)item).getToolMaterialName().equals("WOOD")) return 200;
-            if (item == Items.stick) return 100;
-            if (item == Items.coal) return 1600;
-            if (item == Items.lava_bucket) return 20000;
-            if (item == Item.getItemFromBlock(Blocks.sapling)) return 100;
-            if (item == Items.blaze_rod) return 2400;
-            return GameRegistry.getFuelValue(itemstack);
-		}
+            this.slots[0].stackSize--;
+
+            if (this.slots[0].stackSize <= 0)
+            {
+                this.slots[0] = null;
+            }
+        }
 	}
 	
     @SideOnly(Side.CLIENT)
@@ -120,8 +125,60 @@ public class TileEntityGenerator extends TileEntityMachineBase{
     }
     
     @SideOnly(Side.CLIENT)
-    public int getEnergyScaled(int i)
-    {    	
-        return this.getEnergyStored(ForgeDirection.UNKNOWN) * i / 100;
-    } 	
+    public int getEnergyProgressScaled(int i)
+    {
+        return this.cookTime * i / 100;
+    }
+    
+    public void writeToNBT(NBTTagCompound save)
+    {
+        super.writeToNBT(save);
+        save.setShort("BurnTime", (short)this.burnTime);
+        save.setShort("CookTime", (short)this.cookTime);
+        NBTTagList nbttaglist = new NBTTagList();
+
+        for (int i = 0; i < this.slots.length; ++i)
+        {
+            if (this.slots[i] != null)
+            {
+                NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+                nbttagcompound1.setByte("Slot", (byte)i);
+                this.slots[i].writeToNBT(nbttagcompound1);
+                nbttaglist.appendTag(nbttagcompound1);
+            }
+        }
+
+        save.setTag("Items", nbttaglist);
+
+        if (this.hasCustomInventoryName())
+        {
+            save.setString("CustomName", this.localizedName);
+        }
+    }
+    
+    public void readFromNBT(NBTTagCompound nbt)
+    {
+        super.readFromNBT(nbt);
+        NBTTagList nbttaglist = nbt.getTagList("Items", 10);
+        this.slots = new ItemStack[this.getSizeInventory()];
+
+        for (int i = 0; i < nbttaglist.tagCount(); ++i)
+        {
+            NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
+            byte b0 = nbttagcompound1.getByte("Slot");
+
+            if (b0 >= 0 && b0 < this.slots.length)
+            {
+                this.slots[b0] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+            }
+        }
+        this.burnTime = (int)nbt.getShort("BurnTime");
+        this.cookTime = (int)nbt.getShort("CookTime");
+        this.currentItemBurnTime = getItemBurnTime(this.slots[1]);
+
+        if (nbt.hasKey("CustomName", 8))
+        {
+            this.localizedName = nbt.getString("CustomName");
+        }
+    }
 }
