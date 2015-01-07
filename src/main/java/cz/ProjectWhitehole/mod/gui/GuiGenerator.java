@@ -52,7 +52,7 @@ public class GuiGenerator extends GuiContainer{
         
         int k;
         
-        k = this.Generator.getCookProgressScaled(24);
+        k = this.Generator.getEnergyScaled(24);
         this.drawTexturedModalRect(guiLeft + 79, guiTop + 34, 176, 10, k + 1, 17);
         
         

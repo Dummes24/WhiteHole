@@ -53,6 +53,7 @@ public class ContainerIndustrialRefiner extends Container {
         icrafting.sendProgressBarUpdate(this, 2, this.industrialRefiner.currentItemBurnTime);
     }
     
+    
     public void detectAndSendChanges()
     {
         super.detectAndSendChanges();

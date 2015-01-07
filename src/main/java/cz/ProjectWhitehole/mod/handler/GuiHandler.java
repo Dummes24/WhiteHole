@@ -5,8 +5,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cz.ProjectWhitehole.mod.ModBlocks;
+import cz.ProjectWhitehole.mod.container.ContainerGenerator;
 //import cz.ProjectWhitehole.mod.container.ContainerGenerator;
 import cz.ProjectWhitehole.mod.container.ContainerIndustrialRefiner;
+import cz.ProjectWhitehole.mod.gui.GuiGenerator;
 //import cz.ProjectWhitehole.mod.gui.GuiGenerator;
 import cz.ProjectWhitehole.mod.gui.GuiIndustrialRefiner;
 import cz.ProjectWhitehole.tileentity.TileEntityGenerator;
@@ -29,11 +31,11 @@ public class GuiHandler implements IGuiHandler {
 				}
 				return null;
 				
-				/*case ModBlocks.guiIDGenerator:
-				if(entity instanceof TileEntityIndustrialRefiner) {
+				case ModBlocks.guiIDGenerator:
+				if(entity instanceof TileEntityGenerator) {
 					return new ContainerGenerator(player.inventory, (TileEntityGenerator)entity);
 				}
-				return null;*/
+				return null;
 				
 			}
 		}
@@ -55,11 +57,11 @@ public class GuiHandler implements IGuiHandler {
 				}
 				return null;
 				
-				/*case ModBlocks.guiIDGenerator:
+				case ModBlocks.guiIDGenerator:
 				if(entity instanceof TileEntityIndustrialRefiner) {
 					return new GuiGenerator(player.inventory, (TileEntityGenerator)entity);
 				}
-				return null;*/
+				return null;
 			}
 		}
 		return null;

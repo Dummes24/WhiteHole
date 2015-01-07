@@ -28,7 +28,7 @@ public class ContainerGenerator extends Container {
 		
         this.addSlotToContainer(new Slot(tileentity, 0, 56, 35));
         this.addSlotToContainer(new Slot(tileentity, 1, 8, 62));
-        this.addSlotToContainer(new SlotFurnace(inventoryPlayer.player, tileentity, 2, 116, 35));
+        //this.addSlotToContainer(new SlotFurnace(inventoryPlayer.player, tileentity, 2, 116, 35));
         int i;
         
         for (i = 0; i < 3; i++)
@@ -47,10 +47,9 @@ public class ContainerGenerator extends Container {
 	
     public void addCraftingToCrafters(ICrafting icrafting)
     {
-        super.addCraftingToCrafters(icrafting);
-        icrafting.sendProgressBarUpdate(this, 0, this.Generator.cookTime);
-        icrafting.sendProgressBarUpdate(this, 1, this.Generator.burnTime);
-        icrafting.sendProgressBarUpdate(this, 2, this.Generator.currentItemBurnTime);
+        super.addCraftingToCrafters(icrafting);        
+        icrafting.sendProgressBarUpdate(this, 0, this.Generator.burnTime);
+        icrafting.sendProgressBarUpdate(this, 1, this.Generator.currentItemBurnTime);
     }
     
     public void detectAndSendChanges()
@@ -61,23 +60,17 @@ public class ContainerGenerator extends Container {
         {
             ICrafting icrafting = (ICrafting)this.crafters.get(i);
 
-            if (this.lastCookTime != this.Generator.cookTime)
-            {
-                icrafting.sendProgressBarUpdate(this, 0, this.Generator.cookTime);
-            }
-
             if (this.lastBurnTime != this.Generator.burnTime)
             {
-                icrafting.sendProgressBarUpdate(this, 1, this.Generator.burnTime);
+                icrafting.sendProgressBarUpdate(this, 0, this.Generator.burnTime);
             }
 
             if (this.lastItemBurnTime != this.Generator.currentItemBurnTime)
             {
-                icrafting.sendProgressBarUpdate(this, 2, this.Generator.currentItemBurnTime);
+                icrafting.sendProgressBarUpdate(this, 1, this.Generator.currentItemBurnTime);
             }
         }
-
-        this.lastCookTime = this.Generator.cookTime;
+        
         this.lastBurnTime = this.Generator.burnTime;
         this.lastItemBurnTime = this.Generator.currentItemBurnTime;
     }
@@ -85,17 +78,14 @@ public class ContainerGenerator extends Container {
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(int i, int j)
     {
-        if (i == 0)
-        {
-            this.Generator.cookTime = j;
-        }
+        
 
-        if (i == 1)
+        if (i == 0)
         {
             this.Generator.burnTime = j;
         }
 
-        if (i == 2)
+        if (i == 1)
         {
             this.Generator.currentItemBurnTime = j;
         }
