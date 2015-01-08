@@ -68,6 +68,7 @@ public final class IndustrialRefiner extends BlockContainer{
 				return this.iconFront;
 		   	}
 			else
+				
 			{
 					return side == 1 ? this.iconTop : (side == 0 ? this.iconTop : (side != meta ? this.blockIcon : this.iconFront));
 			}

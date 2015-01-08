@@ -5,11 +5,14 @@ import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import cz.ProjectWhitehole.Blocks.CopperOre;
 import cz.ProjectWhitehole.Blocks.EccdurusiumOre;
+import cz.ProjectWhitehole.Blocks.Generator;
 import cz.ProjectWhitehole.Blocks.GermaniumOre;
 import cz.ProjectWhitehole.Blocks.IndustrialRefiner;
 import cz.ProjectWhitehole.Blocks.PlatinumOre;
 import cz.ProjectWhitehole.Blocks.TinOre;
 import cz.ProjectWhitehole.Blocks.UraniumOre;
+import cz.ProjectWhitehole.tileentity.TileEntityGenerator;
+import cz.ProjectWhitehole.tileentity.TileEntityIndustrialRefiner;
 
 public final class ModBlocks {
 	
@@ -23,6 +26,9 @@ public final class ModBlocks {
 	//Machines
 	public static Block IndustrialRefinerIdle;
 	public static Block IndustrialRefinerActive;
+	
+	public static Block generatorActiveBlock;
+	public static Block generatorIdleBlock;
 	
 	public static Block GeneratorIdle;
 	public static Block GeneratorActive;
@@ -45,12 +51,20 @@ public final class ModBlocks {
 		//Machines
 		IndustrialRefinerIdle = new IndustrialRefiner(false).setCreativeTab(CreativeTabs.tabBlock);
 		IndustrialRefinerActive = new IndustrialRefiner(true).setLightLevel(0.5F);
+		generatorActiveBlock = new Generator(false).setCreativeTab(CreativeTabs.tabBlock);
+		generatorIdleBlock = new Generator(true).setLightLevel(0.5F);
+		
 		
 		
 		//Registering unimplemented Blocks
 		
 		GameRegistry.registerBlock(IndustrialRefinerIdle, "IndustrialRefinerIdle");
 		GameRegistry.registerBlock(IndustrialRefinerActive, "IndustrialRefinerActive");
+		GameRegistry.registerBlock(generatorActiveBlock, "generatorActiveBlock");
+		GameRegistry.registerBlock(generatorIdleBlock, "generatorIdleBlock");
+		
+		GameRegistry.registerTileEntity(TileEntityIndustrialRefiner.class, "IndustrialRefiner");
+		GameRegistry.registerTileEntity(TileEntityGenerator.class, "Generator");
 		
 	}
 }

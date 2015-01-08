@@ -31,6 +31,7 @@ public class GuiGenerator extends GuiContainer{
 		
 		this.fontRendererObj.drawString(name, this.xSize/2 - this.fontRendererObj.getStringWidth(name)/2,6,4210752);
 		this.fontRendererObj.drawString(I18n.format("container.inventory", new Object[0]),120, this.ySize - 96 + 2,4210752);
+		this.fontRendererObj.drawString(Generator.storage, this.xSize/2 - this.fontRendererObj.getStringWidth(name)/2,6,4210752);
 		
 		
 	}
@@ -46,14 +47,14 @@ public class GuiGenerator extends GuiContainer{
         {
             int i1 = this.Generator.getBurnTimeRemainingScaled(40);
             int j = 40 - i1;
-            this.drawTexturedModalRect(guiLeft + 29, guiTop + 65,176,0,40-j,10);
+            this.drawTexturedModalRect(guiLeft + 77, guiTop + 48,176,0,40-j,10);
 
         }
         
         int k;
         
-        k = this.Generator.getCookProgressScaled(24);
-        this.drawTexturedModalRect(guiLeft + 79, guiTop + 34, 176, 10, k + 1, 17);
+        k = this.Generator.getEnergyProgressScaled(40);
+        this.drawTexturedModalRect(guiLeft + 77, guiTop + 23, 176, 10, k + 1, 10);
         
         
 		

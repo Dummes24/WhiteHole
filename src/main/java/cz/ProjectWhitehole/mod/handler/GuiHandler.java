@@ -6,8 +6,10 @@ import net.minecraft.world.World;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cz.ProjectWhitehole.mod.ModBlocks;
 import cz.ProjectWhitehole.mod.container.ContainerGenerator;
+//import cz.ProjectWhitehole.mod.container.ContainerGenerator;
 import cz.ProjectWhitehole.mod.container.ContainerIndustrialRefiner;
 import cz.ProjectWhitehole.mod.gui.GuiGenerator;
+//import cz.ProjectWhitehole.mod.gui.GuiGenerator;
 import cz.ProjectWhitehole.mod.gui.GuiIndustrialRefiner;
 import cz.ProjectWhitehole.tileentity.TileEntityGenerator;
 import cz.ProjectWhitehole.tileentity.TileEntityIndustrialRefiner;
@@ -30,18 +32,18 @@ public class GuiHandler implements IGuiHandler {
 				return null;
 				
 				case ModBlocks.guiIDGenerator:
-				if(entity instanceof TileEntityIndustrialRefiner) {
+				if(entity instanceof TileEntityGenerator) {
 					return new ContainerGenerator(player.inventory, (TileEntityGenerator)entity);
 				}
 				return null;
+				
 			}
 		}
 		return null;
 	}
 
 	@Override
-	public Object getClientGuiElement(int ID, EntityPlayer player, World world,
-			int x, int y, int z) {
+	public Object getClientGuiElement(int ID, EntityPlayer player, World world,int x, int y, int z) {
 		TileEntity entity = world.getTileEntity(x, y, z);
 		
 		if(entity != null ){
@@ -55,7 +57,7 @@ public class GuiHandler implements IGuiHandler {
 				return null;
 				
 				case ModBlocks.guiIDGenerator:
-				if(entity instanceof TileEntityIndustrialRefiner) {
+				if(entity instanceof TileEntityGenerator) {
 					return new GuiGenerator(player.inventory, (TileEntityGenerator)entity);
 				}
 				return null;

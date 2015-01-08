@@ -221,7 +221,8 @@ public class TileEntityIndustrialRefiner extends TileEntity implements ISidedInv
 					this.smeltItem();
 					flag1 = true;
 				}
-			}else{
+			}
+			else{
 				this.cookTime = 0;
 			}
 			
