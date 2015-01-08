@@ -1,6 +1,5 @@
 package cz.ProjectWhitehole.mod;
 
-import cz.ProjectWhitehole.Blocks.CopperOre;
 import cz.ProjectWhitehole.items.BronzeIngot;
 import cz.ProjectWhitehole.items.CopperIngot;
 import cz.ProjectWhitehole.items.EccdurusiumIngot;
@@ -8,7 +7,10 @@ import cz.ProjectWhitehole.items.GermaniumIngot;
 import cz.ProjectWhitehole.items.PlatinumIngot;
 import cz.ProjectWhitehole.items.TinIngot;
 import cz.ProjectWhitehole.items.UraniumIngot;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemFood;
+import net.minecraft.item.ItemSeeds;
 
 public final class ModItems {
 	
@@ -20,6 +22,7 @@ public final class ModItems {
 	public static TinIngot tinIngot;	
 	public static UraniumIngot uraniumIngot;
 	
+	
 	public static void init()
 	{
 		bronzeIngot = new BronzeIngot();
@@ -28,7 +31,8 @@ public final class ModItems {
 		germaniumIngot = new GermaniumIngot();
 		platinumIngot = new PlatinumIngot();		
 		tinIngot = new TinIngot();
-		uraniumIngot = new UraniumIngot();	
+		uraniumIngot = new UraniumIngot();
+
 	}
 
 }

@@ -26,9 +26,8 @@ public class ContainerGenerator extends Container {
 		
 		this.Generator = tileentity;
 		
-        this.addSlotToContainer(new Slot(tileentity, 0, 56, 35));
-        this.addSlotToContainer(new Slot(tileentity, 1, 8, 62));
-        this.addSlotToContainer(new SlotFurnace(inventoryPlayer.player, tileentity, 2, 116, 35));
+        this.addSlotToContainer(new Slot(tileentity, 0, 56, 20));
+        this.addSlotToContainer(new Slot(tileentity, 1, 56, 45));
         int i;
         
         for (i = 0; i < 3; i++)

@@ -24,8 +24,14 @@ public final class ModBlocks {
 	public static Block IndustrialRefinerIdle;
 	public static Block IndustrialRefinerActive;
 	
+	public static Block GeneratorIdle;
+	public static Block GeneratorActive;
+	
+	//Gui
 	public static final int guiIDIndustrialRefiner = 0;
 	public static final int guiIDGenerator = 1; 
+	
+
 	
 	public static void init()
 	{
@@ -39,6 +45,7 @@ public final class ModBlocks {
 		//Machines
 		IndustrialRefinerIdle = new IndustrialRefiner(false).setCreativeTab(CreativeTabs.tabBlock);
 		IndustrialRefinerActive = new IndustrialRefiner(true).setLightLevel(0.5F);
+		
 		
 		//Registering unimplemented Blocks
 		
