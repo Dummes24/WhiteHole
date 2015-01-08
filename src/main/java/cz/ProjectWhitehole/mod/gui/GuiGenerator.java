@@ -31,7 +31,7 @@ public class GuiGenerator extends GuiContainer{
 		
 		this.fontRendererObj.drawString(name, this.xSize/2 - this.fontRendererObj.getStringWidth(name)/2,6,4210752);
 		this.fontRendererObj.drawString(I18n.format("container.inventory", new Object[0]),120, this.ySize - 96 + 2,4210752);
-		this.fontRendererObj.drawString(Generator.storage, this.xSize/2 - this.fontRendererObj.getStringWidth(name)/2,6,4210752);
+		this.fontRendererObj.drawString(String.valueOf(Generator.storedEnergy), 123,24,4210752);
 		
 		
 	}

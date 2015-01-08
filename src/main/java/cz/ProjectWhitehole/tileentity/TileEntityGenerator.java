@@ -26,7 +26,8 @@ public class TileEntityGenerator extends TileEntityMachineBase{
 	public int burnTime = 0;
 	public int currentItemBurnTime = 0;
 	public int furnaceSpeed = 100;
-	private int cookTime; 
+	private int cookTime;
+	public int storedEnergy;
 	
 	private static final int[] slots_top = new int[]{0};
 	private static final int[] slots_bottom = new int[]{2,1};
@@ -49,7 +50,7 @@ public class TileEntityGenerator extends TileEntityMachineBase{
 		
 	public void updateEntity(){
 		boolean flag = this.burnTime > 0;
-		
+		this.storedEnergy = storage.getEnergyStored();
 		//Burn energy and add energy 
 		if (this.burnTime > 0) {
 			this.burnTime--;
@@ -129,7 +130,7 @@ public class TileEntityGenerator extends TileEntityMachineBase{
     @SideOnly(Side.CLIENT)
     public int getEnergyProgressScaled(int i)
     {
-        return this.cookTime * i / 100;
+        return this.storedEnergy * i / storage.getMaxEnergyStored();
     }
     
     public void writeToNBT(NBTTagCompound save)
