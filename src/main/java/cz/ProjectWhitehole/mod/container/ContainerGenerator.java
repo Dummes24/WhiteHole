@@ -111,7 +111,7 @@ public class ContainerGenerator extends Container {
 
             if (i == 2)
             {
-                if (!this.mergeItemStack(itemstack1, 3, 39, true))
+                if (!this.mergeItemStack(itemstack1, 3, 38, true))
                 {
                     return null;
                 }
@@ -129,14 +129,14 @@ public class ContainerGenerator extends Container {
                 }
                 else if (TileEntityFurnace.isItemFuel(itemstack1))
                 {
-                    if (!this.mergeItemStack(itemstack1, 1, 2, false))
+                    if (!this.mergeItemStack(itemstack1, 1, 3, false))
                     {
                         return null;
                     }
                 }
                 else if (i >= 3 && i < 30)
                 {
-                    if (!this.mergeItemStack(itemstack1, 30, 39, false))
+                    if (!this.mergeItemStack(itemstack1, 30, 38, false))
                     {
                         return null;
                     }
@@ -146,7 +146,7 @@ public class ContainerGenerator extends Container {
                     return null;
                 }
             }
-            else if (!this.mergeItemStack(itemstack1, 3, 39, false))
+            else if (!this.mergeItemStack(itemstack1, 3, 38, false))
             {
                 return null;
             }

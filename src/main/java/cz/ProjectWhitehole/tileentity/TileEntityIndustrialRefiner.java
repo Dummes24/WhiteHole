@@ -316,6 +316,7 @@ public class TileEntityIndustrialRefiner extends TileEntity implements ISidedInv
         super.writeToNBT(save);
         save.setShort("BurnTime", (short)this.burnTime);
         save.setShort("CookTime", (short)this.cookTime);
+        save.setShort("CurrentBurnTime",(short)this.currentItemBurnTime);
         NBTTagList nbttaglist = new NBTTagList();
 
         for (int i = 0; i < this.slots.length; ++i)
@@ -355,7 +356,7 @@ public class TileEntityIndustrialRefiner extends TileEntity implements ISidedInv
         }
         this.burnTime = (int)nbt.getShort("BurnTime");
         this.cookTime = (int)nbt.getShort("CookTime");
-        this.currentItemBurnTime = getItemBurnTime(this.slots[1]);
+        this.currentItemBurnTime = (int)nbt.getShort("CurrentBurnTime");
 
         if (nbt.hasKey("CustomName", 8))
         {

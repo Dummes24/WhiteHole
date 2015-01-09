@@ -26,7 +26,6 @@ public class TileEntityGenerator extends TileEntityMachineBase{
 	public int burnTime = 0;
 	public int currentItemBurnTime = 0;
 	public int furnaceSpeed = 100;
-	private int cookTime;
 	public int storedEnergy;
 	
 	private static final int[] slots_top = new int[]{0};
@@ -60,8 +59,13 @@ public class TileEntityGenerator extends TileEntityMachineBase{
 		//If whole 1 fuel was burnt if available burn next fuel, update block itself
 		if (!this.worldObj.isRemote) {
 			if (burnTime == 0 && slots[0] != null){
-				this.currentItemBurnTime = this.burnTime = getItemBurnTime(slots[0]);				
-				this.slots[0].stackSize--;
+				this.currentItemBurnTime = this.burnTime = getItemBurnTime(slots[0]);
+				
+				if(slots[0].stackSize > 1)
+				    this.slots[0].stackSize--;
+				    else {
+				     slots[0] = null;
+				    
 			}
 			if (this.isBurning()) {
 				Generator.updateGeneratorBlockState(burnTime > 0, this.worldObj,this.xCoord,this.yCoord,this.zCoord);
@@ -70,51 +74,10 @@ public class TileEntityGenerator extends TileEntityMachineBase{
 			if ((burnTime > 0) != flag) {
 				//Update industrial furnace
 				this.markDirty();
-			}
+			}}
 				
 	}
 	
-	
-	
-	public boolean canSmelt(){
-		
-		if(this.slots[0] == null){
-			return false;
-		}
-		else{
-			ItemStack itemstack = FurnaceRecipes.smelting().getSmeltingResult(this.slots[0]);
-			
-            if (itemstack == null) return false;
-            if (this.slots[2] == null) return true;
-            if (!this.slots[2].isItemEqual(itemstack)) return false;
-            int result = slots[2].stackSize + itemstack.stackSize;
-            return result <= getInventoryStackLimit() && result <= this.slots[2].getMaxStackSize();
-		}
-	}
-		
-	public void smeltItem()
-	{
-        if (this.canSmelt())
-        {
-            ItemStack itemstack = FurnaceRecipes.smelting().getSmeltingResult(this.slots[0]);
-
-            if (this.slots[2] == null)
-            {
-                this.slots[2] = itemstack.copy();
-            }
-            else if (this.slots[2].getItem() == itemstack.getItem())
-            {
-                this.slots[2].stackSize += itemstack.stackSize; // Forge BugFix: Results may have multiple items
-            }
-
-            this.slots[0].stackSize--;
-
-            if (this.slots[0].stackSize <= 0)
-            {
-                this.slots[0] = null;
-            }
-        }
-	}
 	
     @SideOnly(Side.CLIENT)
     public int getBurnTimeRemainingScaled(int i)
@@ -137,7 +100,8 @@ public class TileEntityGenerator extends TileEntityMachineBase{
     {
         super.writeToNBT(save);
         save.setShort("BurnTime", (short)this.burnTime);
-        save.setShort("CookTime", (short)this.cookTime);
+        save.setShort("CurrentBurnTime",(short)this.currentItemBurnTime);
+        this.storage.writeToNBT(save);
         NBTTagList nbttaglist = new NBTTagList();
 
         for (int i = 0; i < this.slots.length; ++i)
@@ -176,12 +140,114 @@ public class TileEntityGenerator extends TileEntityMachineBase{
             }
         }
         this.burnTime = (int)nbt.getShort("BurnTime");
-        this.cookTime = (int)nbt.getShort("CookTime");
-        this.currentItemBurnTime = getItemBurnTime(this.slots[1]);
-
+        this.currentItemBurnTime = (int)nbt.getShort("CurrentBurnTime");
+        this.storage.readFromNBT(nbt);
         if (nbt.hasKey("CustomName", 8))
         {
             this.localizedName = nbt.getString("CustomName");
         }
     }
+    
+    
+    
+    //Inventory
+
+public String getInventoryName() {
+	return this.hasCustomInventoryName() ? this.localizedName : "container.industrialRefiner";
+	
+}
+
+public boolean hasCustomInventoryName() {
+	
+	return this.localizedName != null && this.localizedName.length() > 0  ;
+}
+
+public int getSizeInventory() {
+	return  this.slots.length;
+}
+
+@Override
+public ItemStack getStackInSlot(int i) {
+	
+	return this.slots[i];
+}
+
+@Override
+public ItemStack decrStackSize(int i, int j) {
+    if (this.slots[i] != null)
+    {
+        ItemStack itemstack;
+
+        if (this.slots[i].stackSize <= j)
+        {
+            itemstack = this.slots[i];
+            this.slots[i] = null;
+            return itemstack;
+        }
+        else
+        {
+            itemstack = this.slots[i].splitStack(j);
+
+            if (this.slots[i].stackSize == 0)
+            {
+                this.slots[i] = null;
+            }
+
+            return itemstack;
+        }
+    }
+    else
+    {
+        return null;
+    }
+}
+
+@Override
+public ItemStack getStackInSlotOnClosing(int i) {
+	
+    if (this.slots[i] != null)
+    {
+        ItemStack itemstack = this.slots[i];
+        this.slots[i] = null;
+        return itemstack;
+    }
+    else
+    {
+        return null;
+    }
+}
+
+@Override
+public void setInventorySlotContents(int i, ItemStack itemstack) {
+	
+    this.slots[i] = itemstack;
+
+    if (itemstack != null && itemstack.stackSize > this.getInventoryStackLimit())
+    {
+        itemstack.stackSize = this.getInventoryStackLimit();
+    }
+}
+
+@Override
+public int getInventoryStackLimit() {
+	return 64;
+}
+
+@Override
+public void openInventory() {
+	
+}
+
+@Override
+public void closeInventory() {
+
+	
+}
+
+@Override
+public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+	return i== 2 ? false : (i==1 ? isItemFuel(itemstack) : true);
+}
+    
+    //Inventory - END
 }
