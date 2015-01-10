@@ -43,8 +43,7 @@ public class Generator extends BlockContainer{
 		this.setBlockName(ProjectWhiteholeMod.MODID + "_" + name);
 		this.setStepSound(soundTypeMetal);
 		this.setHardness(3.0f);
-		this.setHarvestLevel("pickaxe", 2);
-		
+		this.setHarvestLevel("pickaxe", 2);		
 	}
 	
 	@Override

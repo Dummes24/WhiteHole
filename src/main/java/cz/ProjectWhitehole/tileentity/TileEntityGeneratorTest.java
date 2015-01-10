@@ -225,8 +225,7 @@ public class TileEntityGeneratorTest extends TileEntity implements ISidedInvento
 
 	@Override
 	public boolean canExtractItem(int p_102008_1_, ItemStack p_102008_2_,
-			int p_102008_3_) {
-		// TODO Auto-generated method stub
+			int p_102008_3_) {		
 		return false;
 	}
 
