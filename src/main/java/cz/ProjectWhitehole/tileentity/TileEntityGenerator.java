@@ -49,15 +49,20 @@ public class TileEntityGenerator extends TileEntityMachineBase{
 		
 	public void updateEntity(){
 		boolean flag = this.burnTime > 0;
+		boolean flag1 = false;
 		this.storedEnergy = storage.getEnergyStored();
+		
 		//Burn energy and add energy 
 		if (this.burnTime > 0) {
 			this.burnTime--;
-			this.storage.modifyEnergyStored(100);
+			this.storage.modifyEnergyStored(10);
 		}
 		
-		//If whole 1 fuel was burnt if available burn next fuel, update block itself
+		
+		//Celý pøekopat desync mezi klinetem a serverem
+		//If whole 1 fuel was burnt if available burn next fuel,decrease fuel stack size , update block itself
 		if (!this.worldObj.isRemote) {
+
 			if (burnTime == 0 && slots[0] != null){
 				this.currentItemBurnTime = this.burnTime = getItemBurnTime(slots[0]);
 				
@@ -68,13 +73,35 @@ public class TileEntityGenerator extends TileEntityMachineBase{
 				    
 			}
 			if (this.isBurning()) {
+
+				if (slots[0] != null) {
+					if (burnTime == 0) {
+						burnTime = getItemBurnTime(slots[0]);
+						if (burnTime > 0) {
+							flag1 = true;
+							if (slots[0] != null) {
+								if (slots[0].stackSize > 0) {
+									--slots[0].stackSize; //Check when only 1 item not stack
+								}			
+								if (slots[0].stackSize == 0) {
+									slots[0] = null;
+									//slots[0] = slots[0].getItem().getContainerItem(this.slots[0]);
+								}
+							}
+						}
+								
+					}	
+			
+			if (flag != burnTime > 0) {
+
 				Generator.updateGeneratorBlockState(burnTime > 0, this.worldObj,this.xCoord,this.yCoord,this.zCoord);
 			}
+				}
 		}
-			if ((burnTime > 0) != flag) {
+			if (flag1) {
 				//Update industrial furnace
 				this.markDirty();
-			}}
+			}}}
 				
 	}
 	
@@ -101,7 +128,8 @@ public class TileEntityGenerator extends TileEntityMachineBase{
         super.writeToNBT(save);
         save.setShort("BurnTime", (short)this.burnTime);
         save.setShort("CurrentBurnTime",(short)this.currentItemBurnTime);
-        this.storage.writeToNBT(save);
+        save.setInteger("StoredEnergyLoL", (int)this.storedEnergy);
+        storage.writeToNBT(save);
         NBTTagList nbttaglist = new NBTTagList();
 
         for (int i = 0; i < this.slots.length; ++i)
@@ -141,7 +169,8 @@ public class TileEntityGenerator extends TileEntityMachineBase{
         }
         this.burnTime = (int)nbt.getShort("BurnTime");
         this.currentItemBurnTime = (int)nbt.getShort("CurrentBurnTime");
-        this.storage.readFromNBT(nbt);
+        this.storedEnergy = nbt.getInteger("StoredEnergyLoL");
+        storage.setEnergyStored(16000);
         if (nbt.hasKey("CustomName", 8))
         {
             this.localizedName = nbt.getString("CustomName");
