@@ -59,7 +59,7 @@ public class TileEntityGenerator extends TileEntityMachineBase{
 		}
 		
 		
-		//Celý pøekopat desync mezi klinetem a serverem
+		//CelÃ½ pÃ¸ekopat desync mezi klinetem a serverem
 		//If whole 1 fuel was burnt if available burn next fuel,decrease fuel stack size , update block itself
 		if (!this.worldObj.isRemote) {
 
@@ -123,6 +123,7 @@ public class TileEntityGenerator extends TileEntityMachineBase{
         return this.storedEnergy * i / storage.getMaxEnergyStored();
     }
     
+    @Override
     public void writeToNBT(NBTTagCompound save)
     {
         super.writeToNBT(save);
@@ -151,6 +152,7 @@ public class TileEntityGenerator extends TileEntityMachineBase{
         }
     }
     
+    @Override
     public void readFromNBT(NBTTagCompound nbt)
     {
         super.readFromNBT(nbt);
