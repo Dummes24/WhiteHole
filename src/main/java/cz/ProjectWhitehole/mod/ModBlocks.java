@@ -8,6 +8,7 @@ import cz.ProjectWhitehole.Blocks.EccdurusiumOre;
 import cz.ProjectWhitehole.Blocks.Generator;
 import cz.ProjectWhitehole.Blocks.GermaniumOre;
 import cz.ProjectWhitehole.Blocks.IndustrialRefiner;
+import cz.ProjectWhitehole.Blocks.MedicalBlock;
 import cz.ProjectWhitehole.Blocks.PlatinumOre;
 import cz.ProjectWhitehole.Blocks.TinOre;
 import cz.ProjectWhitehole.Blocks.UraniumOre;
@@ -30,10 +31,15 @@ public final class ModBlocks {
 	public static Block generatorActiveBlock;
 	public static Block generatorIdleBlock;
 	
+
 	public static Block GeneratorIdle;
 	public static Block GeneratorActive;
 	
 	//Gui
+
+	public static Block medicalBlock;
+	
+
 	public static final int guiIDIndustrialRefiner = 0;
 	public static final int guiIDGenerator = 1; 
 	
@@ -53,6 +59,7 @@ public final class ModBlocks {
 		IndustrialRefinerActive = new IndustrialRefiner(true).setLightLevel(0.5F);
 		generatorActiveBlock = new Generator(false).setCreativeTab(CreativeTabs.tabBlock);
 		generatorIdleBlock = new Generator(true).setLightLevel(0.5F);
+		//medicalBlock = new MedicalBlock(false);
 		
 		
 		
@@ -62,6 +69,7 @@ public final class ModBlocks {
 		GameRegistry.registerBlock(IndustrialRefinerActive, "IndustrialRefinerActive");
 		GameRegistry.registerBlock(generatorActiveBlock, "generatorActiveBlock");
 		GameRegistry.registerBlock(generatorIdleBlock, "generatorIdleBlock");
+		
 		
 		GameRegistry.registerTileEntity(TileEntityIndustrialRefiner.class, "IndustrialRefiner");
 		GameRegistry.registerTileEntity(TileEntityGenerator.class, "Generator");
