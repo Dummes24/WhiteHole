@@ -8,7 +8,7 @@ import cz.ProjectWhitehole.Blocks.EccdurusiumOre;
 import cz.ProjectWhitehole.Blocks.Generator;
 import cz.ProjectWhitehole.Blocks.GermaniumOre;
 import cz.ProjectWhitehole.Blocks.IndustrialRefiner;
-import cz.ProjectWhitehole.Blocks.MedicalBlock;
+//import cz.ProjectWhitehole.Blocks.MedicalBlock;
 import cz.ProjectWhitehole.Blocks.PlatinumOre;
 import cz.ProjectWhitehole.Blocks.TinOre;
 import cz.ProjectWhitehole.Blocks.UraniumOre;
@@ -50,7 +50,7 @@ public final class ModBlocks {
 		IndustrialRefinerActive = new IndustrialRefiner(true).setLightLevel(0.5F);
 		generatorActiveBlock = new Generator(false).setCreativeTab(CreativeTabs.tabBlock);
 		generatorIdleBlock = new Generator(true).setLightLevel(0.5F);
-		medicalBlock = new MedicalBlock(false);
+		//medicalBlock = new MedicalBlock(false);
 		
 		
 		//Registering unimplemented Blocks
