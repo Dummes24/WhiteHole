@@ -32,12 +32,10 @@ public final class ModBlocks {
 	public static Block generatorIdleBlock;
 
 	public static Block GeneratorIdle;
-	public static Block GeneratorActive;
-	
+	public static Block GeneratorActive;	
 
 	public static Block medicalBlockActive;
-	public static Block medicalBlockIdle;
-	
+	public static Block medicalBlockIdle;	
 
 	public static final int guiIDIndustrialRefiner = 0;
 	public static final int guiIDGenerator = 1; 
@@ -54,18 +52,15 @@ public final class ModBlocks {
 		tinOre = new TinOre();
 		
 		//Machines
-		IndustrialRefinerIdle = new IndustrialRefiner(false).setCreativeTab(CreativeTabs.tabBlock);
+		IndustrialRefinerIdle = new IndustrialRefiner(false).setCreativeTab(ProjectWhiteholeMod.tabWhiteHole);
 		IndustrialRefinerActive = new IndustrialRefiner(true).setLightLevel(0.5F);
-		generatorActiveBlock = new Generator(false).setCreativeTab(CreativeTabs.tabBlock);
+		generatorActiveBlock = new Generator(false).setCreativeTab(ProjectWhiteholeMod.tabWhiteHole);
 		generatorIdleBlock = new Generator(true).setLightLevel(0.5F);
 		medicalBlockActive = new MedicalBlock(true);
-		medicalBlockIdle = new MedicalBlock(false).setCreativeTab(CreativeTabs.tabBlock);
-
+		medicalBlockIdle = new MedicalBlock(false).setCreativeTab(ProjectWhiteholeMod.tabWhiteHole);		
 		
 		
-		
-		//Registering unimplemented Blocks
-		
+		//Registering unimplemented Blocks		
 		GameRegistry.registerBlock(IndustrialRefinerIdle, "IndustrialRefinerIdle");
 		GameRegistry.registerBlock(IndustrialRefinerActive, "IndustrialRefinerActive");
 		GameRegistry.registerBlock(generatorActiveBlock, "generatorActiveBlock");

@@ -14,7 +14,7 @@ public final class GermaniumOre extends Block{
 	{
 		super(Material.rock);
 		this.setBlockName(ProjectWhiteholeMod.MODID + "_" + name);
-		this.setCreativeTab(CreativeTabs.tabBlock);
+		this.setCreativeTab(ProjectWhiteholeMod.tabWhiteHoleMaterials);
 		this.setStepSound(soundTypeStone);
 		this.setHardness(3.0f);
 		this.setHarvestLevel("pickaxe", 2);

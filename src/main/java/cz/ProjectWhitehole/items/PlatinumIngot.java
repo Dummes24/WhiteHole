@@ -10,7 +10,7 @@ public class PlatinumIngot extends Item {
   	public PlatinumIngot(){
   		
   		setUnlocalizedName(ProjectWhiteholeMod.MODID +"_" + name);
-  		setCreativeTab(CreativeTabs.tabMaterials);
+  		setCreativeTab(ProjectWhiteholeMod.tabWhiteHoleMaterials);
   		GameRegistry.registerItem(this, name);
   		setTextureName(ProjectWhiteholeMod.MODID +":"+name);
   	}

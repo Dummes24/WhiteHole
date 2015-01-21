@@ -11,7 +11,7 @@ public class EccdurusiumIngot extends Item {
   	public EccdurusiumIngot(){
   		
   		setUnlocalizedName(ProjectWhiteholeMod.MODID +"_" + name);
-  		setCreativeTab(CreativeTabs.tabMaterials);
+  		setCreativeTab(ProjectWhiteholeMod.tabWhiteHoleMaterials);
   		GameRegistry.registerItem(this, name);
   		setTextureName(ProjectWhiteholeMod.MODID +":"+name);
   	}

@@ -28,14 +28,14 @@ public class ProjectWhiteholeMod {
 		@SideOnly(Side.CLIENT)
 		
 		public Item getTabIconItem(){
-			return Item.getItemFromBlock(Blocks.anvil);
+			return Item.getItemFromBlock(ModBlocks.IndustrialRefinerActive);
 		}
 	};
 	
 	public static CreativeTabs tabWhiteHoleMaterials = new CreativeTabs("WhiteHoleMaterials"){		
 		@SideOnly(Side.CLIENT)		
 		public Item getTabIconItem(){
-			return Item.getItemFromBlock(Blocks.brick_block);
+			return ModItems.bronzeIngot;
 		}
 	};
 	

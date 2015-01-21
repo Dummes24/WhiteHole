@@ -10,7 +10,7 @@ public class UraniumIngot extends Item {
   	public UraniumIngot(){
   		
   		setUnlocalizedName(ProjectWhiteholeMod.MODID +"_" + name);
-  		setCreativeTab(CreativeTabs.tabMaterials);
+  		setCreativeTab(ProjectWhiteholeMod.tabWhiteHoleMaterials);
   		GameRegistry.registerItem(this, name);
   		setTextureName(ProjectWhiteholeMod.MODID +":"+name);
   	}
