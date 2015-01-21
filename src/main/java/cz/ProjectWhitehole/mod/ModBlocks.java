@@ -53,6 +53,7 @@ public final class ModBlocks {
 		generatorIdleBlock = new Generator(true).setLightLevel(0.5F);
 		medicalBlockActive = new MedicalBlock(true);
 		medicalBlockIdle = new MedicalBlock(false).setCreativeTab(CreativeTabs.tabBlock);
+
 		
 		
 		//Registering unimplemented Blocks
