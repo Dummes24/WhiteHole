@@ -5,6 +5,7 @@ import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import cz.ProjectWhitehole.Blocks.CopperOre;
 import cz.ProjectWhitehole.Blocks.EccdurusiumOre;
+import cz.ProjectWhitehole.Blocks.EccdurusiumStarGateBlock;
 import cz.ProjectWhitehole.Blocks.Generator;
 import cz.ProjectWhitehole.Blocks.GermaniumOre;
 import cz.ProjectWhitehole.Blocks.IndustrialRefiner;
@@ -23,6 +24,7 @@ public final class ModBlocks {
 	public static Block platinumOre;
 	public static Block uraniumOre;
 	public static Block tinOre;
+	public static Block eccdurusiumStarGateBlock; 
 	
 	//Machines
 	public static Block IndustrialRefinerIdle;
@@ -52,6 +54,7 @@ public final class ModBlocks {
 		platinumOre = new PlatinumOre();
 		uraniumOre = new UraniumOre();
 		tinOre = new TinOre();
+		eccdurusiumStarGateBlock = new EccdurusiumStarGateBlock();
 		
 		//Machines
 		IndustrialRefinerIdle = new IndustrialRefiner(false).setCreativeTab(CreativeTabs.tabBlock);
