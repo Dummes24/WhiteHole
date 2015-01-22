@@ -22,7 +22,7 @@ import net.minecraft.world.World;
 public class MedicalBlock extends BlockContainer{	
 	
 	Boolean isActive;
-	String name = "medicalBlock";
+	String name = "MedicalBlock";
 	private static Boolean keepInventory;
 	
 	@SideOnly(Side.CLIENT)
