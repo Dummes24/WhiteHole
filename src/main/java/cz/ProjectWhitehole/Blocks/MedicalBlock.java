@@ -74,7 +74,7 @@ public class MedicalBlock extends BlockContainer{
 	
 	@Override
 	public void registerBlockIcons(IIconRegister iconRegister){
-		this.blockIcon = iconRegister.registerIcon(ProjectWhiteholeMod.MODID + ":"+ name);
+		this.blockIcon = iconRegister.registerIcon(ProjectWhiteholeMod.MODID + ":"+ name + "_Side");
 		this.iconTop = iconRegister.registerIcon(ProjectWhiteholeMod.MODID + ":"+ name + (this.isActive ? "_TopOn":"_TopOff"));		
 	}
 	
