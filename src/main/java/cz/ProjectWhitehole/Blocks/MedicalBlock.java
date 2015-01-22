@@ -36,14 +36,7 @@ public class MedicalBlock extends BlockContainer{
 		this.setStepSound(soundTypeMetal);
 		this.setHardness(3.0f);
 		this.setHarvestLevel("pickaxe", 2);		
-	}
-	
-     @Override
-    public void onBlockAdded(World p_149726_1_, int p_149726_2_,
-    		int p_149726_3_, int p_149726_4_) {    	
-    	super.onBlockAdded(p_149726_1_, p_149726_2_, p_149726_3_, p_149726_4_);
-    	
-    }
+	}    
 
 	@Override
 	public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {

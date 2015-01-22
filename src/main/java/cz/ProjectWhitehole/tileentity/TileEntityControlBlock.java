@@ -1,23 +1,30 @@
 package cz.ProjectWhitehole.tileentity;
 
-import com.sun.org.apache.xml.internal.security.keys.storage.StorageResolver;
-import com.sun.xml.internal.bind.v2.TODO;
-import com.typesafe.config.ConfigException.Parse;
+
+import java.util.Iterator;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityControlBlock extends TileEntity implements IEnergyReceiver{
 	//TODO GUI
 	//TODO local adresses, Save and load to NBT
-	//TODO method to check if SG is complete
 
 	EnergyStorage storage = new EnergyStorage(262144);
+	
+	int xStargate;
+	int yStargate;
+	int zStargate;
+	
+	int gateDirection = 0; //Gate on X = 1 , Z = 2
 	
 	@Override
 	public boolean canConnectEnergy(ForgeDirection from) {		
@@ -47,6 +54,8 @@ public class TileEntityControlBlock extends TileEntity implements IEnergyReceive
 		
 	}
 	
+	//TODO Add control block to check of SG complete, probably in check of lowest
+	
 	/**
 	 * Return true if Stargate at coord is complete = usable, Pass coordiantions of bottom middle block
 	 * @param activated
@@ -67,7 +76,18 @@ public class TileEntityControlBlock extends TileEntity implements IEnergyReceive
 									 {Blocks.redstone_lamp,Blocks.air,Blocks.air,Blocks.air,Blocks.redstone_lamp},
 									 {Blocks.obsidian,Blocks.air,Blocks.air,Blocks.air,Blocks.air,Blocks.air,Blocks.obsidian},
 									 {Blocks.redstone_lamp,Blocks.air,Blocks.air,Blocks.air,Blocks.air,Blocks.air,Blocks.redstone_lamp}};
-		int gateDirection = 0; //Gate on X = 1 , Z = 2
+		
+		
+		//Change for activated SG
+		if (activated) {
+			for (Block[] row : offStargateBig) {
+				for (Block block : row) {
+					if (block == Blocks.air) {
+						block = Blocks.portal;
+					}
+				}
+			}
+		}
 		
 		//Direction set / check
 		if (world.getBlock(xCoord, yCoord, zCoord) == Blocks.redstone_lamp) {
@@ -89,8 +109,7 @@ public class TileEntityControlBlock extends TileEntity implements IEnergyReceive
 			return false;
 		}
 		
-		//Check rest
-		//TODO Change array for activated gate		 
+		//Check rest				 
 		boolean checkResult = true;
 		
 		for (int i = 0; i < offStargateBig.length; i++) {
@@ -115,12 +134,37 @@ public class TileEntityControlBlock extends TileEntity implements IEnergyReceive
 				  }
 				}
 			}
-		}
-		
-		//Delete
-		return false;
+		}		
+		return true;
 	}
 	
+	private Iterator<Entity> entitesInStargate(){
+		
+		return this.worldObj.getEntitiesWithinAABB(Entity.class, boundingBoxOfStarGate()).iterator();
+	}
 	
+	private AxisAlignedBB boundingBoxOfStarGate(){
+		
+		if (gateDirection == 1) {
+			return AxisAlignedBB.getBoundingBox((double)(xStargate - 2), (double)yStargate, (double)zStargate, (double)(xStargate + 2), (double)(yStargate + 5), (double)(zStargate + 1));
+		}
+		else {
+			return AxisAlignedBB.getBoundingBox((double)(xStargate), (double)yStargate, (double)(zStargate - 2), (double)(xStargate + 1), (double)(yStargate + 5), (double)(zStargate + 2));
+		}
+	}
+	
+	//TODO Implement teleporting
+	/** 	 
+	 * @param entity Entity to teleport
+	 * @param world Destination world
+	 * @param xCoord Destination x coordinates 
+	 * @param yCoord Destination y coordinates
+	 * @param zCoord Destination z coordinates
+	 * @return true if entity was teleported
+	 */
+	private boolean teleportEntity(Entity entity, World world, int xCoord , int yCoord , int zCoord){
+		
+		return false;
+	}
 	
 }
