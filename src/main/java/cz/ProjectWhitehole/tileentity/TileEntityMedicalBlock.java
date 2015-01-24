@@ -1,11 +1,13 @@
 package cz.ProjectWhitehole.tileentity;
 
 import java.util.Iterator;
+import java.util.Random;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
 import cz.ProjectWhitehole.Blocks.MedicalBlock;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
@@ -20,6 +22,7 @@ public class TileEntityMedicalBlock extends TileEntity implements IEnergyReceive
 	
 	protected EnergyStorage storage = new EnergyStorage(2000);	
 	int healTimer = 0;
+	Random rand = new Random();
 	
 	@Override
 	public boolean canConnectEnergy(ForgeDirection from) {
@@ -67,11 +70,14 @@ public class TileEntityMedicalBlock extends TileEntity implements IEnergyReceive
 			{
 				EntityPlayer entityplayer = (EntityPlayer) iterator.next();
 				entityplayer.heal(1f);
+				this.worldObj.setBlock(xCoord+1, yCoord+1, zCoord, Block.getBlockById(59));
 				//entityplayer.addPotionEffect(new PotionEffect(Potion.regeneration.id,180,0, false)); //Just adds wibly hearts and doesn't end 
 				//storage.modifyEnergyStored(-100);				
 			}		
 			healTimer = 0;
 			}
+			Block crop = this.worldObj.getBlock(xCoord+1, yCoord+1, zCoord);
+			crop.updateTick(worldObj, xCoord+1, yCoord+1, zCoord, rand);
 	}	
 	
 	

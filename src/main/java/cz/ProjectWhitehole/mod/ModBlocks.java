@@ -12,6 +12,8 @@ import cz.ProjectWhitehole.Blocks.MedicalBlock;
 import cz.ProjectWhitehole.Blocks.PlatinumOre;
 import cz.ProjectWhitehole.Blocks.TinOre;
 import cz.ProjectWhitehole.Blocks.UraniumOre;
+import cz.ProjectWhitehole.hydro.HydroponicContainer;
+import cz.ProjectWhitehole.hydro.HydroponicContainerTile;
 import cz.ProjectWhitehole.tileentity.TileEntityGenerator;
 import cz.ProjectWhitehole.tileentity.TileEntityIndustrialRefiner;
 
@@ -31,15 +33,14 @@ public final class ModBlocks {
 	public static Block generatorActiveBlock;
 	public static Block generatorIdleBlock;
 
-	public static Block GeneratorIdle;
-	public static Block GeneratorActive;	
-
 	public static Block medicalBlockActive;
 	public static Block medicalBlockIdle;	
 
 	public static final int guiIDIndustrialRefiner = 0;
-	public static final int guiIDGenerator = 1; 
+	public static final int guiIDGenerator = 1;
 	
+	//Utils blocks
+	public static Block HydroponicContainer;
 
 	
 	public static void init()
@@ -54,11 +55,13 @@ public final class ModBlocks {
 		//Machines
 		IndustrialRefinerIdle = new IndustrialRefiner(false).setCreativeTab(ProjectWhiteholeMod.tabWhiteHole);
 		IndustrialRefinerActive = new IndustrialRefiner(true).setLightLevel(0.5F);
-		generatorActiveBlock = new Generator(false).setCreativeTab(ProjectWhiteholeMod.tabWhiteHole);
-		generatorIdleBlock = new Generator(true).setLightLevel(0.5F);
+		generatorIdleBlock = new Generator(false).setCreativeTab(ProjectWhiteholeMod.tabWhiteHole);
+		generatorActiveBlock = new Generator(true).setLightLevel(0.5F);
 		medicalBlockActive = new MedicalBlock(true);
 		medicalBlockIdle = new MedicalBlock(false).setCreativeTab(ProjectWhiteholeMod.tabWhiteHole);		
 		
+		//Utils Block
+		HydroponicContainer = new HydroponicContainer();
 		
 		//Registering unimplemented Blocks		
 		GameRegistry.registerBlock(IndustrialRefinerIdle, "IndustrialRefinerIdle");
@@ -68,9 +71,10 @@ public final class ModBlocks {
 		GameRegistry.registerBlock(medicalBlockActive, "medicalBlockActive");
 		GameRegistry.registerBlock(medicalBlockIdle, "medicalBlockIdle");
 		
-		
+		//Registering TileEntitees
 		GameRegistry.registerTileEntity(TileEntityIndustrialRefiner.class, "IndustrialRefiner");
 		GameRegistry.registerTileEntity(TileEntityGenerator.class, "Generator");
+		GameRegistry.registerTileEntity(HydroponicContainerTile.class, "HydroponicContainer");
 		
 	}
 }
