@@ -1,6 +1,9 @@
 package cz.ProjectWhitehole.Blocks;
 
 import java.util.Random;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import cz.ProjectWhitehole.mod.ModBlocks;
 import cz.ProjectWhitehole.mod.ProjectWhiteholeMod;
 import net.minecraft.block.Block;
@@ -9,9 +12,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.util.IIcon;
 
-public class ChevronBlockStarGate extends Block{
-	 //TODO Need to setup proper sides to render activated textures, probably from TileEntityControlBlock
-	//TODO variable if whole stargate is assigned to any controlBlock
+public class ChevronBlockStarGate extends Block{	
 	String name = "chevronBlockStarGate";	
 	boolean isActive;	
 	
@@ -26,8 +27,7 @@ public class ChevronBlockStarGate extends Block{
 	
 	@Override
 	public void registerBlockIcons(IIconRegister iconRegister){
-		this.blockIcon = iconRegister.registerIcon(ProjectWhiteholeMod.MODID + ":"+ name);
-			
+		this.blockIcon = iconRegister.registerIcon(ProjectWhiteholeMod.MODID + ":"+ name + (this.isActive ? "_On" :""));		
 	}
 	
 	@Override

@@ -1,10 +1,20 @@
 package cz.ProjectWhitehole.tileentity;
 
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.apache.commons.io.filefilter.FalseFileFilter;
+import org.omg.CORBA.Environment;
+
+import com.sun.org.apache.xml.internal.dtm.ref.EmptyIterator;
+import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
+
+import akka.util.Collections;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
+import cz.ProjectWhitehole.Blocks.Stargate;
+import cz.ProjectWhitehole.mod.ModBlocks;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
@@ -20,11 +30,8 @@ public class TileEntityControlBlock extends TileEntity implements IEnergyReceive
 
 	EnergyStorage storage = new EnergyStorage(262144);	
 		
-	int xStargate = xCoord - 2;
-	int yStargate = yCoord;
-	int zStargate = zCoord;
-	
-	int gateDirection = 0; //Gate on X = 1 , Z = 2
+	Stargate assiggnedStargate;
+	int dialStage,dialTime= 0;	
 	
 	@Override
 	public boolean canConnectEnergy(ForgeDirection from) {		
@@ -47,174 +54,84 @@ public class TileEntityControlBlock extends TileEntity implements IEnergyReceive
 	}
 	
 	@Override
-	public void updateEntity(){
-		//TODO Dialing
-		//TODO Opening wormhole on both sides (needs load chunk)
-		//TODO Teleporting entities (+adding close time)		
-		
-		Iterator<Entity> entitiesInside = entitesInStargate();
-		while (entitiesInside.hasNext()) {
-			Entity toTeleport = entitiesInside.next();
-			teleportEntity(toTeleport, this.worldObj, (int)toTeleport.posX + 2, (int)toTeleport.posY + 2 , (int)toTeleport.posZ + 2);
-		}
-		
-	}
-		
-	/**
-	 * Return true if Stargate at coord is complete = usable, Pass coordiantions of bottom middle block
-	 * @param activated
-	 * 				Decides if method checks for portal blocks inside stargate
-	 * */
-	private boolean isStargateComplete(boolean activated,World world, int xCoord , int yCoord , int zCoord){
-		
-		Block[][] offStargateBig = {
-								{Blocks.obsidian,Blocks.redstone_lamp,Blocks.obsidian},
-								{Blocks.redstone_lamp,Blocks.air,Blocks.air,Blocks.air,Blocks.redstone_lamp},
-								{Blocks.obsidian,Blocks.air,Blocks.air,Blocks.air,Blocks.air,Blocks.air,Blocks.obsidian},
-								{Blocks.redstone_lamp,Blocks.air,Blocks.air,Blocks.air,Blocks.air,Blocks.air,Blocks.redstone_lamp},
-								{Blocks.obsidian,Blocks.air,Blocks.air,Blocks.air,Blocks.air,Blocks.air,Blocks.obsidian},
-								{Blocks.redstone_lamp,Blocks.air,Blocks.air,Blocks.air,Blocks.redstone_lamp},
-								{Blocks.obsidian,Blocks.redstone_lamp,Blocks.obsidian}
-								};	
-		
-		//Change for activated SG
-		if(activated) {
-			for (Block[] row : offStargateBig){
-				for (Block block : row) {
-					if (block == Blocks.air) {
-						block = Blocks.portal;
-					}
-				}
-			}
-		}
-		
-		//Direction set / check
-		if (world.getBlock(xCoord, yCoord, zCoord) == Blocks.redstone_lamp) {
-			if (world.getBlock(xCoord - 1, yCoord, zCoord) == Blocks.obsidian && world.getBlock(xCoord+1,yCoord,zCoord)== Blocks.obsidian){
-				gateDirection = 1;
-			}
-			else if (world.getBlock(xCoord, yCoord, zCoord -1) == Blocks.obsidian && world.getBlock(xCoord,yCoord,zCoord + 1)== Blocks.obsidian) {
-				gateDirection = 2;
-			}
-			else {
-				//Debug
-				System.out.printf("Stargate is not valid at %d, %d, %d",xCoord,yCoord,zCoord);
-				return false;
-			}
+	public void updateEntity(){		
+		if (assiggnedStargate == null) {
+			assiggnedStargate = assignStarGate();
 		}
 		else {
-			//Debug
-			System.out.printf("Stargate is not valid at %d, %d, %d",xCoord,yCoord,zCoord);
-			return false;
-		}
-		
-		//Check rest				 
-		boolean checkResult = true;
-		
-		for (int i = 0; i < offStargateBig.length; i++) {
-			//First block in row
-			int x,y,z;
-			if (gateDirection == 1) {
-				x = xCoord - (int)(offStargateBig[i].length / 2) - 1;
-				y = yCoord + 7 - i;
-				z = zCoord;
+			
+			//Dial
+			if (worldObj.getBlock(xCoord, yCoord - 1, zCoord) == Blocks.redstone_block && dialStage == 0) { //Noobish activation
+				worldObj.setBlock(xCoord, yCoord -1,  zCoord, Blocks.air);
+				dialStage = assiggnedStargate.dial(dialStage);
 			}
-			else {
-				x = xCoord;
-				y = yCoord + 7 - i;
-				z = zCoord - (int)(offStargateBig[i].length / 2) - 1;
+			if (dialStage != 0) {
+				dialTime++;
 			}
-			for (int j = 0; j < offStargateBig[i].length * 2; j++) {
-				if (gateDirection == 1) {
-				  if (world.getBlock(x + j, y, z) != offStargateBig[i][j]) {
-					  //Debug
-					  System.out.printf("Stargate is not valid at %d, %d, %d",xCoord,yCoord,zCoord);					  
-					  return false;
-				  }
+			if (dialStage != 0 && dialTime >= 20) {
+				dialStage = assiggnedStargate.dial(dialStage);
+				dialTime = 0;
+			}
+			
+			//Opened gate
+			if (assiggnedStargate.getIsActivated()) {
+				if (assiggnedStargate.openTime <= 0) {
+					assiggnedStargate.closeGate();
 				}
-				else {
-					if (world.getBlock(x , y, z + j) != offStargateBig[i][j]) {
-						  //Debug
-						  System.out.printf("Stargate is not valid at %d, %d, %d",xCoord,yCoord,zCoord);					  
-						  return false;
-					  }
+				else{
+					assiggnedStargate.openTime--;
+				}
+				//Teleport
+				Iterator<Entity> entities = assiggnedStargate.entitesInStargate();
+				while (entities.hasNext()) {
+					//TODO Replace fix coords with GUI selection
+					assiggnedStargate.teleportEntity(entities.next(), worldObj,assiggnedStargate.getX() + 10,assiggnedStargate.getY() + 2,assiggnedStargate.getZ() + 10);
 				}
 			}
 		}		
-		return true;
+			
+		//TODO Opening wormhole on both sides (needs load chunk)					
+		
 	}
 	
-	private Iterator<Entity> entitesInStargate(){
+	private Stargate assignStarGate()
+	{
+		//Find all possible stargates around control Block
+		ArrayList<Stargate> possibleSG =  new ArrayList<Stargate>();
 		
-		return this.worldObj.getEntitiesWithinAABB(Entity.class, AxisAlignedBB.getBoundingBox((double)xCoord, (double)yCoord, (double)zCoord, (double)xCoord+1, (double)yCoord + 2, (double)zCoord + 1)).iterator();
-	}
-	
-	private AxisAlignedBB boundingBoxOfStarGate(){
-		
-		if (gateDirection == 1) {
-			return AxisAlignedBB.getBoundingBox((double)(xStargate - 2), (double)yStargate, (double)zStargate, (double)(xStargate + 2), (double)(yStargate + 5), (double)(zStargate + 1));
+		if (worldObj.getBlock(xCoord + 2, yCoord, zCoord) == ModBlocks.chevronBlockStarGateIdle) {
+			possibleSG.add(new Stargate(worldObj, xCoord + 2, yCoord, zCoord, 0,false));
+		}
+		else if (worldObj.getBlock(xCoord - 2, yCoord, zCoord) == ModBlocks.chevronBlockStarGateIdle) {
+			possibleSG.add(new Stargate(worldObj, xCoord - 2, yCoord, zCoord, 0,false));
+		}
+		else if (worldObj.getBlock(xCoord, yCoord, zCoord + 2) == ModBlocks.chevronBlockStarGateIdle) {
+			possibleSG.add(new Stargate(worldObj, xCoord, yCoord, zCoord + 2, 1,false));
+		}
+		else if (worldObj.getBlock(xCoord, yCoord, zCoord - 2) == ModBlocks.chevronBlockStarGateIdle) {
+			possibleSG.add(new Stargate(worldObj, xCoord, yCoord, zCoord - 2, 1,false));
 		}
 		else {
-			return AxisAlignedBB.getBoundingBox((double)(xStargate), (double)yStargate, (double)(zStargate - 2), (double)(xStargate + 1), (double)(yStargate + 5), (double)(zStargate + 2));
+			return null;
 		}
-	}
-	
-	//TODO Implement teleporting
-	/** 	 
-	 * @param entity Entity to teleport
-	 * @param world Destination world
-	 * @param xCoord Destination x coordinates 
-	 * @param yCoord Destination y coordinates
-	 * @param zCoord Destination z coordinates
-	 * @return true if entity was teleported
-	 */
-	private boolean teleportEntity(Entity entity, World world, int xCoord , int yCoord , int zCoord){
 		
-		//entity.setLocationAndAngles(xCoord, yCoord, zCoord, entity.rotationYaw, entity.rotationPitch);
-		System.out.printf("Teleported to %d %d %d",xCoord,yCoord,zCoord);
-		entity.setPosition((double)xCoord, (double)yCoord, (double)zCoord);
-		//entity.moveEntity((double)xCoord, (double)yCoord, (double)zCoord);
-		
-		return true;
-	}
-	
-	private directionResult getDirectionOfStarGate(World world, int x, int y, int z){
-		if (world.getBlock(x, y, z) == Blocks.redstone_lamp) {
-			if (world.getBlock(x - 1, y, z) == Blocks.obsidian && world.getBlock(x+1,y,z)== Blocks.obsidian){
-				return new directionResult(true, 1);
-			}
-			else if (world.getBlock(x, y, z -1) == Blocks.obsidian && world.getBlock(x,y,z + 1)== Blocks.obsidian) {
-				return new directionResult(true, 2);
-			}
-			else {
-				//Debug
-				System.out.printf("Stargate is not valid at %d, %d, %d",xCoord,yCoord,zCoord);
-				return new directionResult(false, 0);
-			}
+		//Return first valid
+		if (!possibleSG.isEmpty()) {
+			for (Stargate stargate : possibleSG) {
+				stargate.validate();
+				if (stargate.getIsValid()) {
+					
+					//Debug
+					System.out.printf("Validated SG at %d %d %d" + System.getProperty("line.separator"), stargate.getX(),stargate.getY(), stargate.getZ());
+					
+					return stargate;
+				}
+			}			
 		}
 		else {
-			//Debug
-			System.out.printf("Stargate is not valid at %d, %d, %d",xCoord,yCoord,zCoord);
-			return new directionResult(false, 0);
+			return null;
 		}
-	}
-	
-	//Class for return of getDirection
-	private class directionResult{
-		boolean isStarGateValid;
-		int direction;
-		public directionResult(boolean isStargateValid,int direction)
-		{
-			this.isStarGateValid = isStargateValid;
-			this.direction = direction;
-		}
-		public boolean getValidation(){
-			return this.isStarGateValid;			
-		}
-		
-		public int getDirection(){
-			return this.direction;
-		}
+		return null;
 	}
 	
 }

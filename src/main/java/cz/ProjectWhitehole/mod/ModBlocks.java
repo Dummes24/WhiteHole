@@ -13,8 +13,10 @@ import cz.ProjectWhitehole.Blocks.GermaniumOre;
 import cz.ProjectWhitehole.Blocks.IndustrialRefiner;
 import cz.ProjectWhitehole.Blocks.MedicalBlock;
 import cz.ProjectWhitehole.Blocks.PlatinumOre;
+import cz.ProjectWhitehole.Blocks.PortalBlockStarGate;
 import cz.ProjectWhitehole.Blocks.TinOre;
 import cz.ProjectWhitehole.Blocks.UraniumOre;
+import cz.ProjectWhitehole.tileentity.TileEntityControlBlock;
 import cz.ProjectWhitehole.tileentity.TileEntityGenerator;
 import cz.ProjectWhitehole.tileentity.TileEntityIndustrialRefiner;
 
@@ -43,8 +45,9 @@ public final class ModBlocks {
 	public static Block medicalBlockIdle;
 	
 	public static Block controlBlockStargateBlock;
-	public static ChevronBlockStarGate chevronBlockStarGateActive;
-	public static ChevronBlockStarGate chevronBlockStarGateIdle;
+	public static Block chevronBlockStarGateActive;
+	public static Block chevronBlockStarGateIdle;
+	public static Block portalBlockStarGate;
 
 	public static final int guiIDIndustrialRefiner = 0;
 	public static final int guiIDGenerator = 1; 
@@ -59,9 +62,10 @@ public final class ModBlocks {
 		platinumOre = new PlatinumOre();
 		uraniumOre = new UraniumOre();
 		tinOre = new TinOre();
-		eccdurusiumStarGateBlock = new EccdurusiumStarGateBlock();
-		chevronBlockStarGateActive = new ChevronBlockStarGate(true);
-		chevronBlockStarGateIdle = new ChevronBlockStarGate(false);
+		eccdurusiumStarGateBlock = new EccdurusiumStarGateBlock().setCreativeTab(ProjectWhiteholeMod.tabWhiteHole);
+		chevronBlockStarGateActive = new ChevronBlockStarGate(true).setLightLevel(0.5F);
+		chevronBlockStarGateIdle = new ChevronBlockStarGate(false).setCreativeTab(ProjectWhiteholeMod.tabWhiteHole);
+		portalBlockStarGate = new PortalBlockStarGate().setCreativeTab(ProjectWhiteholeMod.tabWhiteHole);
 		
 		//Machines
 		IndustrialRefinerIdle = new IndustrialRefiner(false).setCreativeTab(CreativeTabs.tabBlock);
@@ -83,10 +87,15 @@ public final class ModBlocks {
 		GameRegistry.registerBlock(generatorIdleBlock, "generatorIdleBlock");
 		GameRegistry.registerBlock(medicalBlockActive, "medicalBlockActive");
 		GameRegistry.registerBlock(medicalBlockIdle, "medicalBlockIdle");
+		GameRegistry.registerBlock(chevronBlockStarGateActive, "chevronBlockStarGateActive");
+		GameRegistry.registerBlock(chevronBlockStarGateIdle, "chevronBlockStarGateIdle");
+		GameRegistry.registerBlock(portalBlockStarGate, "portalBlockStarGate");
 		
 		
 		GameRegistry.registerTileEntity(TileEntityIndustrialRefiner.class, "IndustrialRefiner");
 		GameRegistry.registerTileEntity(TileEntityGenerator.class, "Generator");
+		GameRegistry.registerTileEntity(TileEntityControlBlock.class, "StargateControlBlock");
+		
 		
 	}
 }

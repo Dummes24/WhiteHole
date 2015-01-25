@@ -3,6 +3,8 @@ package cz.ProjectWhitehole.Blocks;
 import java.util.Random;
 
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import cz.ProjectWhitehole.mod.ModBlocks;
 import cz.ProjectWhitehole.mod.ProjectWhiteholeMod;
 import cz.ProjectWhitehole.tileentity.TileEntityControlBlock;
@@ -13,12 +15,14 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 public class ControlBlockStargate extends Block implements ITileEntityProvider{
 	//TODO One way texture
 	
 	String name = "controlBlockStargate";
+	
 
 	public ControlBlockStargate() {
 		super(Material.iron);		
@@ -32,7 +36,9 @@ public class ControlBlockStargate extends Block implements ITileEntityProvider{
 	
 	@Override
 	public void registerBlockIcons(IIconRegister iconRegister) {
-		this.blockIcon = iconRegister.registerIcon(ProjectWhiteholeMod.MODID + ":"+ name);		
+		this.blockIcon = iconRegister.registerIcon(ProjectWhiteholeMod.MODID + ":"+ name);
+		
+		
 	}
 	
 	public String returnName(){
