@@ -3,6 +3,7 @@ package cz.ProjectWhitehole.mod;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
+import cz.ProjectWhitehole.Blocks.ChevronBlockStarGate;
 import cz.ProjectWhitehole.Blocks.ControlBlockStargate;
 import cz.ProjectWhitehole.Blocks.CopperOre;
 import cz.ProjectWhitehole.Blocks.EccdurusiumOre;
@@ -42,6 +43,8 @@ public final class ModBlocks {
 	public static Block medicalBlockIdle;
 	
 	public static Block controlBlockStargateBlock;
+	public static ChevronBlockStarGate chevronBlockStarGateActive;
+	public static ChevronBlockStarGate chevronBlockStarGateIdle;
 
 	public static final int guiIDIndustrialRefiner = 0;
 	public static final int guiIDGenerator = 1; 
@@ -57,6 +60,8 @@ public final class ModBlocks {
 		uraniumOre = new UraniumOre();
 		tinOre = new TinOre();
 		eccdurusiumStarGateBlock = new EccdurusiumStarGateBlock();
+		chevronBlockStarGateActive = new ChevronBlockStarGate(true);
+		chevronBlockStarGateIdle = new ChevronBlockStarGate(false);
 		
 		//Machines
 		IndustrialRefinerIdle = new IndustrialRefiner(false).setCreativeTab(CreativeTabs.tabBlock);

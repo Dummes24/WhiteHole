@@ -1,7 +1,6 @@
 package cz.ProjectWhitehole.Blocks;
 
 import java.util.Random;
-
 import cz.ProjectWhitehole.mod.ModBlocks;
 import cz.ProjectWhitehole.mod.ProjectWhiteholeMod;
 import net.minecraft.block.Block;
@@ -11,17 +10,14 @@ import net.minecraft.item.Item;
 import net.minecraft.util.IIcon;
 
 public class ChevronBlockStarGate extends Block{
-	 //TODO Need to setup sides to render activated textures, probably from TileEntityControlBlock
+	 //TODO Need to setup proper sides to render activated textures, probably from TileEntityControlBlock
 	//TODO variable if whole stargate is assigned to any controlBlock
 	String name = "chevronBlockStarGate";	
 	boolean isActive;	
 	
-	protected ChevronBlockStarGate(boolean isActive) {
-		super(Material.iron);
-		
-		this.isActive = isActive;
-		
-						
+	public ChevronBlockStarGate(boolean isActive) {
+		super(Material.iron);		
+		this.isActive = isActive;						
 		this.setBlockName(ProjectWhiteholeMod.MODID + "_" + name);		
 		this.setStepSound(soundTypeMetal);
 		this.setHardness(3.0f);
@@ -41,7 +37,7 @@ public class ChevronBlockStarGate extends Block{
 	
 	@Override
 	public Item getItemDropped(int i, Random random, int j) {		
-		return Item.getItemFromBlock(ModBlocks.medicalBlockIdle);
+		return Item.getItemFromBlock(ModBlocks.chevronBlockStarGateIdle);
 	}
 
 }
