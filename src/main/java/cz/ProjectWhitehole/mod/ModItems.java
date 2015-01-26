@@ -4,6 +4,7 @@ import cz.ProjectWhitehole.items.BronzeIngot;
 import cz.ProjectWhitehole.items.CopperIngot;
 import cz.ProjectWhitehole.items.EccdurusiumIngot;
 import cz.ProjectWhitehole.items.GermaniumIngot;
+import cz.ProjectWhitehole.items.HydroponicSolutionBucket;
 import cz.ProjectWhitehole.items.PlatinumIngot;
 import cz.ProjectWhitehole.items.TinIngot;
 import cz.ProjectWhitehole.items.UraniumIngot;
@@ -32,6 +33,7 @@ public final class ModItems {
 		platinumIngot = new PlatinumIngot();		
 		tinIngot = new TinIngot();
 		uraniumIngot = new UraniumIngot();
+		
 
 	}
 

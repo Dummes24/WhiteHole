@@ -1,8 +1,11 @@
 package cz.ProjectWhitehole.mod;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.block.Block;
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.block.material.Material;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
 import cz.ProjectWhitehole.Blocks.CopperOre;
 import cz.ProjectWhitehole.Blocks.EccdurusiumOre;
 import cz.ProjectWhitehole.Blocks.Generator;
@@ -14,6 +17,9 @@ import cz.ProjectWhitehole.Blocks.TinOre;
 import cz.ProjectWhitehole.Blocks.UraniumOre;
 import cz.ProjectWhitehole.hydro.HydroponicContainer;
 import cz.ProjectWhitehole.hydro.HydroponicContainerTile;
+import cz.ProjectWhitehole.hydro.HydroponicSolutionBlock;
+import cz.ProjectWhitehole.items.HydroponicSolutionBucket;
+import cz.ProjectWhitehole.mod.handler.BucketHandler;
 import cz.ProjectWhitehole.tileentity.TileEntityGenerator;
 import cz.ProjectWhitehole.tileentity.TileEntityIndustrialRefiner;
 
@@ -41,6 +47,12 @@ public final class ModBlocks {
 	
 	//Utils blocks
 	public static Block HydroponicContainer;
+	
+	//Fluid
+	public static Fluid hydroponicSolution;
+	public static Block hydroponicSolutionBlock;
+	public static HydroponicSolutionBucket hydroponicSolutionBucket;
+
 
 	
 	public static void init()
@@ -62,6 +74,15 @@ public final class ModBlocks {
 		
 		//Utils Block
 		HydroponicContainer = new HydroponicContainer();
+		
+		//Fluid
+		hydroponicSolution = new Fluid("HydroponicSolution");
+		FluidRegistry.registerFluid(hydroponicSolution);
+		hydroponicSolutionBlock = new HydroponicSolutionBlock(hydroponicSolution, Material.water);
+		hydroponicSolutionBucket = new HydroponicSolutionBucket(hydroponicSolutionBlock);
+		
+		BucketHandler.INSTANCE.buckets.put(hydroponicSolutionBlock, hydroponicSolutionBucket);
+		MinecraftForge.EVENT_BUS.register(BucketHandler.INSTANCE);
 		
 		//Registering unimplemented Blocks		
 		GameRegistry.registerBlock(IndustrialRefinerIdle, "IndustrialRefinerIdle");
