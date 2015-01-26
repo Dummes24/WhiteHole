@@ -27,6 +27,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 public class TileEntityControlBlock extends TileEntity implements IEnergyReceiver{
 	//TODO GUI
 	//TODO local adresses, Save and load to NBT
+	//TODO solve saving state of stargate (dialing, opened wormhole)
 
 	EnergyStorage storage = new EnergyStorage(262144);	
 		
@@ -61,7 +62,7 @@ public class TileEntityControlBlock extends TileEntity implements IEnergyReceive
 		else {
 			
 			//Dial
-			if (worldObj.getBlock(xCoord, yCoord - 1, zCoord) == Blocks.redstone_block && dialStage == 0) { //Noobish activation
+			if (worldObj.getBlock(xCoord, yCoord - 1, zCoord) == Blocks.redstone_block && dialStage == 0 && !assiggnedStargate.getIsActivated()) { //Noobish activation
 				worldObj.setBlock(xCoord, yCoord -1,  zCoord, Blocks.air);
 				dialStage = assiggnedStargate.dial(dialStage);
 			}
@@ -94,6 +95,8 @@ public class TileEntityControlBlock extends TileEntity implements IEnergyReceive
 		
 	}
 	
+	
+	/**Returns first valid stargate around controlBlock*/
 	private Stargate assignStarGate()
 	{
 		//Find all possible stargates around control Block

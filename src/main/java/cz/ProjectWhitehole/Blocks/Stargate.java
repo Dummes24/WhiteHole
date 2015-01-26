@@ -1,8 +1,10 @@
 package cz.ProjectWhitehole.Blocks;
 
+import java.io.Console;
 import java.util.Iterator;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.AxisAlignedBB;
@@ -43,7 +45,10 @@ public class Stargate {
 			for (Block[] blocks : stargateState) {
 				for (Block block : blocks) {
 					if (block == Blocks.air) {
-						block = Blocks.portal;
+						block = ModBlocks.portalBlockStarGate;
+					}
+					else if (block == ModBlocks.chevronBlockStarGateIdle) {
+						block = ModBlocks.chevronBlockStarGateActive;
 					}
 				}
 			}
@@ -52,8 +57,11 @@ public class Stargate {
 		else {
 			for (Block[] blocks : stargateState) {
 				for (Block block : blocks) {
-					if (block == Blocks.portal) {
+					if (block == ModBlocks.portalBlockStarGate) {
 						block = Blocks.air;
+					}
+					else if (block == ModBlocks.chevronBlockStarGateActive) {
+						block = ModBlocks.chevronBlockStarGateIdle;
 					}
 				}
 			}
@@ -68,6 +76,7 @@ public class Stargate {
 		this.z = z;
 		this.direction = direction;
 		this.isActivated = isActivated;
+		//TODO Call negActivation if detected Activated stargate before validation
 		//setChevronCoords();
 	}
 	
@@ -91,16 +100,16 @@ public class Stargate {
 		isValid = validation();
 	}	
 	
+	/**Check if whole stargate is completed and sets coordinations of chevron and portal blocks*/
 	private boolean validation(){
+		
+		//Coords of chevron and portal blocks for dialing
 		int countChevron = 0;
 		int countAir = 0;
+		
 		for (int i = 0; i < stargateState.length; i++) {
 			//First block in row
-			int x,y,z;
-			
-			//Coords of chevron blocks for dialing
-			
-			
+			int x,y,z;			
 			if (direction == 0) {
 				x = this.x - (int)(stargateState[i].length / 2);
 				y = this.y + 6 - i;
@@ -116,6 +125,7 @@ public class Stargate {
 				  if (world.getBlock(x + j, y, z) != stargateState[i][j]) {
 					  return false;
 					 }
+				  //Init for dial
 				  else if (stargateState[i][j] == Blocks.air) {
 					  insideCoords[countAir] = new Coords(x + j, y, z);
 					  countAir++;
@@ -131,6 +141,7 @@ public class Stargate {
 					if (world.getBlock(x , y, z + j) != stargateState[i][j]) {
 						  return false;
 					  }
+					//Init for dial
 					else if (stargateState[i][j] == Blocks.air) {
 						insideCoords[countAir] = new Coords(x, y, z + j);
 						countAir++;  
@@ -157,11 +168,13 @@ public class Stargate {
 	}
 	}
 
+	/**Returns Iterator of entities inside stargate*/
 	public Iterator<Entity> entitesInStargate(){
 		AxisAlignedBB box = boundingBoxOfStarGate();		
 		return world.getEntitiesWithinAABB(Entity.class, box).iterator();	
 	}
 	
+	/**Returns Bounding box of inside of stargate*/
 	private AxisAlignedBB boundingBoxOfStarGate(){
 		if (direction == 0) {			
 			return AxisAlignedBB.getBoundingBox((double)(x - 2), (double)y + 1, (double)z, (double)(x + 3), (double)(y + 6), (double)(z + 1));
@@ -171,15 +184,21 @@ public class Stargate {
 		}		
 	}
 	
+	/**Teleports passed entity to passed coordinations*/
 	public boolean teleportEntity(Entity entity, World world, int xCoord , int yCoord , int zCoord){		
 		//Debug
 		System.out.printf("Teleported %s to %d %d %d" + System.getProperty("line.separator"),entity.getCommandSenderName(),xCoord,yCoord,zCoord);
 		
 		entity.setPosition((double)xCoord, (double)yCoord, (double)zCoord);
-		openTime += 200;
+		try {
+			openTime += 200;
+		} catch (ArithmeticException arithmeticException) {
+			openTime = 0;			
+		}
 		return true;
 	}	
 	
+	/**Set array of chevronCoords clockwise */
 	private void setChevronCoords(){
 		if (direction == 0) {
 			chevronCoords[0][0] = x;
@@ -234,13 +253,9 @@ public class Stargate {
 			chevronCoords[7][2] = z - 2;
 		}
 	}
-
-	private void setInsidePortal(){
-		insideCoords[0] = new Coords(x - 1, y + 5, z);
-	}
 	
-	public int dial(int stage){
-		//TODO Set portal blocks
+	/**Handles dialing based on a passed int, activates chevron block, if stage = 7 activates gate (Sets portalBlocks inside)*/
+	public int dial(int stage){		
 		world.setBlock(chevronCoords[stage][0],chevronCoords[stage][1],chevronCoords[stage][2],ModBlocks.chevronBlockStarGateActive);
 		if (stage == 7) {
 			activateGate();
@@ -250,10 +265,9 @@ public class Stargate {
 		return ++stage;
 		}
 	}
-
-	private void activateGate() {
-		//TODO Set PortalBlocks inside StarGate
-		
+	
+	/**Sets start openTime and sets portalBlocks inside stargate*/
+	private void activateGate() {		
 		this.isActivated = true;
 		openTime = 600;
 		
@@ -262,10 +276,9 @@ public class Stargate {
 		}
 		
 	}
-
-	public void closeGate() {
-		// TODO Remove Portal blocks inside SG
-		
+	
+	/**Resets openTime, chevronBlocks, removes portalBlocks*/
+	public void closeGate() {		
 		this.isActivated = false;
 		openTime = 0;
 		for (int[] chevronCoord : chevronCoords) {
@@ -277,6 +290,7 @@ public class Stargate {
 		
 	}
 	
+	/**Class to pass coordinations*/
 	private class Coords{
 		public int x,y,z;
 		
