@@ -5,6 +5,7 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.IPlantable;
 
 public class HydroponicContainerTile extends TileEntity {
 
@@ -18,10 +19,10 @@ public class HydroponicContainerTile extends TileEntity {
 		Random rand = new Random();
 		if(cropBlock instanceof IGrowable){
 			
-			if(rand.nextInt(10000) < 5 && (((IGrowable)cropBlock).func_149851_a(this.worldObj, xCoord, yCoord+1, zCoord, true)) ){
+			if(rand.nextInt(100) < 5 && (((IGrowable)cropBlock).func_149851_a(this.worldObj, xCoord, yCoord+1, zCoord, true)) ){
 			
 				//cropBlock.updateTick(worldObj, xCoord, yCoord+1, zCoord, rand);
-				this.worldObj.setBlockMetadataWithNotify(xCoord, yCoord+1, zCoord, cropMeta+1, 2);
+				//this.worldObj.setBlockMetadataWithNotify(xCoord, yCoord+2, zCoord, cropMeta+1, 2);
 				tickCount = 0;
 			
 		}

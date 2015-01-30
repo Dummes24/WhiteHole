@@ -21,7 +21,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.util.ForgeDirection;
 
-public class HydroponicContainer extends BlockContainer {
+public class HydroponicContainer extends Block {
 
 	String name = "HydroponicContainer";
 	
@@ -33,6 +33,7 @@ public class HydroponicContainer extends BlockContainer {
 		this.setCreativeTab(ProjectWhiteholeMod.tabWhiteHole);
 		this.setStepSound(soundTypeMetal);
 		this.setBlockName(ProjectWhiteholeMod.MODID + "_" + name);
+		this.setTickRandomly(true);
 		GameRegistry.registerBlock(this, name);	
 		
 	}
@@ -41,6 +42,21 @@ public class HydroponicContainer extends BlockContainer {
 	public void registerBlockIcons(IIconRegister iconRegister){
 		this.blockIcon = iconRegister.registerIcon(ProjectWhiteholeMod.MODID + ":"+ name + "_Side");
 		this.iconTop = iconRegister.registerIcon(ProjectWhiteholeMod.MODID + ":"+ name + "_Top");	
+	}
+	
+	@Override
+	public void updateTick(World world, int x, int y, int z, Random rand){
+		
+		Block cropBlock = world.getBlock(x, y+1, z);
+		
+        if (cropBlock instanceof IPlantable)
+        {
+            for (int i = 0; i < 30; i++) {
+				cropBlock.updateTick(world, x, y + 1, z, rand);
+			}
+        }
+        world.setBlock(x+1, y, z, Block.getBlockById(9));
+        
 	}
 	
 	@Override
@@ -76,10 +92,5 @@ public class HydroponicContainer extends BlockContainer {
 		return Item.getItemFromBlock(this);
 	}
 	
-	@Override
-	public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
-		
-		return new HydroponicContainerTile();
-	}
 
 }
