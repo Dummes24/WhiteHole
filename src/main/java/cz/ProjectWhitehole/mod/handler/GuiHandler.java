@@ -1,5 +1,7 @@
 package cz.ProjectWhitehole.mod.handler;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -8,9 +10,12 @@ import cz.ProjectWhitehole.mod.ModBlocks;
 import cz.ProjectWhitehole.mod.container.ContainerGenerator;
 //import cz.ProjectWhitehole.mod.container.ContainerGenerator;
 import cz.ProjectWhitehole.mod.container.ContainerIndustrialRefiner;
+import cz.ProjectWhitehole.mod.container.ContainerStargate;
 import cz.ProjectWhitehole.mod.gui.GuiGenerator;
 //import cz.ProjectWhitehole.mod.gui.GuiGenerator;
 import cz.ProjectWhitehole.mod.gui.GuiIndustrialRefiner;
+import cz.ProjectWhitehole.mod.gui.GuiStarGate;
+import cz.ProjectWhitehole.tileentity.TileEntityControlBlock;
 import cz.ProjectWhitehole.tileentity.TileEntityGenerator;
 import cz.ProjectWhitehole.tileentity.TileEntityIndustrialRefiner;
 
@@ -36,7 +41,10 @@ public class GuiHandler implements IGuiHandler {
 					return new ContainerGenerator(player.inventory, (TileEntityGenerator)entity);
 				}
 				return null;
-				
+				case ModBlocks.guiIDStargateContolBlock:
+					if(entity instanceof TileEntityControlBlock) {
+						return new ContainerStargate(player.inventory, (TileEntityControlBlock)entity);
+					}
 			}
 		}
 		return null;
@@ -61,6 +69,11 @@ public class GuiHandler implements IGuiHandler {
 					return new GuiGenerator(player.inventory, (TileEntityGenerator)entity);
 				}
 				return null;
+				
+				case ModBlocks.guiIDStargateContolBlock:
+					if (entity instanceof TileEntityControlBlock) {
+						return new GuiStarGate((TileEntityControlBlock)entity);
+					}
 			}
 		}
 		return null;

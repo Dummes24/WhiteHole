@@ -31,7 +31,9 @@ public class TileEntityControlBlock extends TileEntity implements IEnergyReceive
 	EnergyStorage storage = new EnergyStorage(262144);	
 		
 	Stargate assiggnedStargate;
-	int dialStage,dialTime= 0;	
+	int dialStage,dialTime, assignTime= 0;	
+	boolean activationFromGui = false;
+	int[] coordsToTeleport = new int[3];
 	
 	@Override
 	public boolean canConnectEnergy(ForgeDirection from) {		
@@ -53,17 +55,32 @@ public class TileEntityControlBlock extends TileEntity implements IEnergyReceive
 		return storage.getMaxEnergyStored();
 	}
 	
+	public void activateFromGui(int x, int y, int z) {		
+		coordsToTeleport[0] = x;
+		coordsToTeleport[1] = y;
+		coordsToTeleport[2] = z;
+		this.activationFromGui = true;		
+	}
+	
+	public boolean hasAssignedValidStargate(){
+		return assiggnedStargate != null;
+	}
+	
 	@Override
-	public void updateEntity(){		
+	public void updateEntity(){
 		if (assiggnedStargate == null) {
-			assiggnedStargate = assignStarGate();
-		}
-		else {
-			
+			assignTime++;
+			if (assignTime >= 100) {
+				assiggnedStargate = assignStarGate();
+				assignTime = 0;
+			}
+		}		
+		else {			
 			//Dial
-			if (worldObj.getBlock(xCoord, yCoord - 1, zCoord) == Blocks.redstone_block && dialStage == 0) { //Noobish activation
+			if (activationFromGui && dialStage == 0) { //Noobish activation
 				worldObj.setBlock(xCoord, yCoord -1,  zCoord, Blocks.air);
 				dialStage = assiggnedStargate.dial(dialStage);
+				activationFromGui = false;
 			}
 			if (dialStage != 0) {
 				dialTime++;
@@ -84,11 +101,13 @@ public class TileEntityControlBlock extends TileEntity implements IEnergyReceive
 				//Teleport
 				Iterator<Entity> entities = assiggnedStargate.entitesInStargate();
 				while (entities.hasNext()) {
-					//TODO Replace fix coords with GUI selection
-					assiggnedStargate.teleportEntity(entities.next(), worldObj,assiggnedStargate.getX() + 10,assiggnedStargate.getY() + 2,assiggnedStargate.getZ() + 10);
+					//TODO Replace fix coords with GUI selection (needs validation on other side)
+					Entity entity = entities.next();
+					assiggnedStargate.teleportEntity(entity, entity.worldObj , coordsToTeleport[0],coordsToTeleport[1],coordsToTeleport[2]);
 				}
 			}
-		}		
+		}	
+		
 			
 		//TODO Opening wormhole on both sides (needs load chunk)					
 		

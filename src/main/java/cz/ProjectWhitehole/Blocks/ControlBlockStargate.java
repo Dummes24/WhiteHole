@@ -2,6 +2,7 @@ package cz.ProjectWhitehole.Blocks;
 
 import java.util.Random;
 
+import cpw.mods.fml.common.network.internal.FMLNetworkHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -19,7 +20,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 public class ControlBlockStargate extends Block implements ITileEntityProvider{
-	//TODO One way texture
+	//TODO Texture
 	
 	String name = "controlBlockStargate";
 	
@@ -53,7 +54,10 @@ public class ControlBlockStargate extends Block implements ITileEntityProvider{
 	@Override
 	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ){
 		//TODO Implement GUI
-		return false;
+		if(!world.isRemote){
+			player.openGui(ProjectWhiteholeMod.instance, ModBlocks.guiIDStargateContolBlock, world, x, y, z);
+		}
+		return true;
 	}
 	
 	@Override

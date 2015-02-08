@@ -12,6 +12,7 @@ import org.apache.commons.lang3.Validate;
 
 import com.sun.xml.internal.bind.v2.runtime.Coordinator;
 
+import cz.ProjectWhitehole.mod.Coordinations;
 import cz.ProjectWhitehole.mod.ModBlocks;
 
 public class Stargate {
@@ -36,7 +37,7 @@ public class Stargate {
 			};	
 	
 	int[][] chevronCoords = new int[8][3];	
-	Coords[] insideCoords = new Coords[21];
+	Coordinations[] insideCoords = new Coordinations[21];
 	
 	private void negActivation(){
 		if (!isActivated) {
@@ -117,7 +118,7 @@ public class Stargate {
 					  return false;
 					 }
 				  else if (stargateState[i][j] == Blocks.air) {
-					  insideCoords[countAir] = new Coords(x + j, y, z);
+					  insideCoords[countAir] = new Coordinations(x + j, y, z);
 					  countAir++;
 				  }
 				  else if (stargateState[i][j] == ModBlocks.chevronBlockStarGateIdle) {
@@ -132,7 +133,7 @@ public class Stargate {
 						  return false;
 					  }
 					else if (stargateState[i][j] == Blocks.air) {
-						insideCoords[countAir] = new Coords(x, y, z + j);
+						insideCoords[countAir] = new Coordinations(x, y, z + j);
 						countAir++;  
 					}
 					else if (stargateState[i][j] == ModBlocks.chevronBlockStarGateIdle) {
@@ -176,7 +177,7 @@ public class Stargate {
 		System.out.printf("Teleported %s to %d %d %d" + System.getProperty("line.separator"),entity.getCommandSenderName(),xCoord,yCoord,zCoord);
 		
 		entity.setPosition((double)xCoord, (double)yCoord, (double)zCoord);
-		openTime += 200;
+		openTime += 0;
 		return true;
 	}	
 	
@@ -235,12 +236,8 @@ public class Stargate {
 		}
 	}
 
-	private void setInsidePortal(){
-		insideCoords[0] = new Coords(x - 1, y + 5, z);
-	}
 	
-	public int dial(int stage){
-		//TODO Set portal blocks
+	public int dial(int stage){		
 		world.setBlock(chevronCoords[stage][0],chevronCoords[stage][1],chevronCoords[stage][2],ModBlocks.chevronBlockStarGateActive);
 		if (stage == 7) {
 			activateGate();
@@ -252,39 +249,27 @@ public class Stargate {
 	}
 
 	private void activateGate() {
-		//TODO Set PortalBlocks inside StarGate
 		
 		this.isActivated = true;
-		openTime = 600;
+		openTime = 200;
 		
-		for (Coords coord : insideCoords) {
-			world.setBlock(coord.x, coord.y, coord.z, ModBlocks.portalBlockStarGate);
+		for (Coordinations coord : insideCoords) {
+			world.setBlock(coord.getX(), coord.getY(), coord.getZ(), ModBlocks.portalBlockStarGate);
 		}
 		
 	}
 
-	public void closeGate() {
-		// TODO Remove Portal blocks inside SG
-		
+	public void closeGate() {		
 		this.isActivated = false;
 		openTime = 0;
 		for (int[] chevronCoord : chevronCoords) {
 			world.setBlock(chevronCoord[0], chevronCoord[1], chevronCoord[2], ModBlocks.chevronBlockStarGateIdle);
 		}
-		for (Coords coord : insideCoords) {
-			world.setBlock(coord.x, coord.y, coord.z, Blocks.air);
+		for (Coordinations coord : insideCoords) {
+			world.setBlock(coord.getX(), coord.getY(), coord.getZ(), Blocks.air);
 		}
 		
 	}
-	
-	private class Coords{
-		public int x,y,z;
-		
-		public Coords(int x,int y,int z){
-			this.x = x;
-			this.y = y;
-			this.z = z;
-		}
-	}
+
 }
 

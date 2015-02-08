@@ -51,6 +51,7 @@ public final class ModBlocks {
 
 	public static final int guiIDIndustrialRefiner = 0;
 	public static final int guiIDGenerator = 1; 
+	public static final int guiIDStargateContolBlock = 2;
 	
 
 	

@@ -18,7 +18,7 @@ import cz.ProjectWhitehole.tileentity.TileEntityIndustrialRefiner;
 @Mod(modid = ProjectWhiteholeMod.MODID, version = ProjectWhiteholeMod.VERSION)
 public class ProjectWhiteholeMod {
 	public static final String MODID = "projectwhitehole";
-    public static final String VERSION = "0.0.1";
+    public static final String VERSION = "0.1";
     
     @Instance(MODID)
     public static ProjectWhiteholeMod instance;
