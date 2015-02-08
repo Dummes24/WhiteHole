@@ -69,6 +69,7 @@ public class Stargate {
 		this.z = z;
 		this.direction = direction;
 		this.isActivated = isActivated;
+		validate();
 		//setChevronCoords();
 	}
 	

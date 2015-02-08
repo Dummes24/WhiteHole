@@ -3,6 +3,7 @@ package cz.ProjectWhitehole.mod.gui;
 import org.lwjgl.opengl.GL11;
 
 import scala.reflect.internal.Trees.This;
+import cz.ProjectWhitehole.Blocks.Stargate;
 import cz.ProjectWhitehole.mod.Coordinations;
 import cz.ProjectWhitehole.mod.ProjectWhiteholeMod;
 import cz.ProjectWhitehole.tileentity.TileEntityControlBlock;
@@ -77,31 +78,41 @@ public class GuiStarGate extends GuiScreen{
 	
 	@Override
 	protected void actionPerformed(GuiButton button) {
+		Coordinations coordsFromTextField = new Coordinations(selectedCoords[0], selectedCoords[1], selectedCoords[2]);
 		switch (button.id) {
 		case 0:
 			//TODO Select gui and coresponding select box	
 			break;
 		case 1:
-			Coordinations coordsToSave = new Coordinations(selectedCoords[0], selectedCoords[1], selectedCoords[2]);
 			
-			if (coordsToSave.areValid()) {
+			
+			if (coordsFromTextField.areValid()) {
 				//TODO Save coords
 				//TODO Request name from user
 			}
 			
 			break;
 			
-		case 2:			
-			Coordinations coordsToDial = new Coordinations(selectedCoords[0], selectedCoords[1], selectedCoords[2]);			
-				
-				if (tileEntity.hasAssignedValidStargate() && coordsToDial.areValid()) {
-					tileEntity.activateFromGui(coordsToDial.getX(), coordsToDial.getY(),coordsToDial.getZ());
+		case 2:				
+				if (tileEntity.hasAssignedValidStargate() && coordsFromTextField.areValid() && validateStargate(coordsFromTextField)) { 
+					tileEntity.activateFromGui(coordsFromTextField.getX(), coordsFromTextField.getY() + 3,coordsFromTextField.getZ());
 				}			
 			break;
 
 		default:
 			break;
 		}		
+	}
+	
+	private boolean validateStargate(Coordinations coords){		
+		if (new Stargate(tileEntity.getWorldObj(), coords.getX(), coords.getY(), coords.getZ(), 0, false).getIsValid()) {
+			return true;
+		}
+		else if (new Stargate(tileEntity.getWorldObj(), coords.getX(), coords.getY(), coords.getZ(), 1, false).getIsValid()) {
+			return true;
+		}
+		
+		return false;
 	}
 	
 	@Override

@@ -25,8 +25,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileEntityControlBlock extends TileEntity implements IEnergyReceiver{
-	//TODO GUI
-	//TODO local adresses, Save and load to NBT
 
 	EnergyStorage storage = new EnergyStorage(262144);	
 		
@@ -100,8 +98,7 @@ public class TileEntityControlBlock extends TileEntity implements IEnergyReceive
 				}
 				//Teleport
 				Iterator<Entity> entities = assiggnedStargate.entitesInStargate();
-				while (entities.hasNext()) {
-					//TODO Replace fix coords with GUI selection (needs validation on other side)
+				while (entities.hasNext()) {					
 					Entity entity = entities.next();
 					assiggnedStargate.teleportEntity(entity, entity.worldObj , coordsToTeleport[0],coordsToTeleport[1],coordsToTeleport[2]);
 				}
@@ -137,7 +134,7 @@ public class TileEntityControlBlock extends TileEntity implements IEnergyReceive
 		//Return first valid
 		if (!possibleSG.isEmpty()) {
 			for (Stargate stargate : possibleSG) {
-				stargate.validate();
+				//stargate.validate();
 				if (stargate.getIsValid()) {
 					
 					//Debug
