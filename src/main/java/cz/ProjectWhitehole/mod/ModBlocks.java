@@ -6,6 +6,8 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cz.ProjectWhitehole.Accelerator.InductionCoil;
+import cz.ProjectWhitehole.Accelerator.TilePACInterface;
 import cz.ProjectWhitehole.Blocks.CopperOre;
 import cz.ProjectWhitehole.Blocks.EccdurusiumOre;
 import cz.ProjectWhitehole.Blocks.Generator;
@@ -22,6 +24,7 @@ import cz.ProjectWhitehole.items.HydroponicSolutionBucket;
 import cz.ProjectWhitehole.mod.handler.BucketHandler;
 import cz.ProjectWhitehole.tileentity.TileEntityGenerator;
 import cz.ProjectWhitehole.tileentity.TileEntityIndustrialRefiner;
+import cz.ProjectWhitehole.Accelerator.PACInterface;
 
 public final class ModBlocks {
 	
@@ -41,12 +44,16 @@ public final class ModBlocks {
 
 	public static Block medicalBlockActive;
 	public static Block medicalBlockIdle;	
+	
+	public static Block PACInterface;
 
 	public static final int guiIDIndustrialRefiner = 0;
 	public static final int guiIDGenerator = 1;
+	public static final int guiIDPACInterface = 2;
 	
 	//Utils blocks
 	public static Block HydroponicContainer;
+	public static Block inductionCoil;
 	
 	//Fluid
 	public static Fluid hydroponicSolution;
@@ -70,10 +77,14 @@ public final class ModBlocks {
 		generatorIdleBlock = new Generator(false).setCreativeTab(ProjectWhiteholeMod.tabWhiteHole);
 		generatorActiveBlock = new Generator(true).setLightLevel(0.5F);
 		medicalBlockActive = new MedicalBlock(true);
-		medicalBlockIdle = new MedicalBlock(false).setCreativeTab(ProjectWhiteholeMod.tabWhiteHole);		
+		medicalBlockIdle = new MedicalBlock(false).setCreativeTab(ProjectWhiteholeMod.tabWhiteHole);
+		PACInterface = new PACInterface();
+		
+		
 		
 		//Utils Block
 		HydroponicContainer = new HydroponicContainer();
+		inductionCoil = new InductionCoil();
 		
 		//Fluid
 		hydroponicSolution = new Fluid("HydroponicSolution");
@@ -96,6 +107,7 @@ public final class ModBlocks {
 		GameRegistry.registerTileEntity(TileEntityIndustrialRefiner.class, "IndustrialRefiner");
 		GameRegistry.registerTileEntity(TileEntityGenerator.class, "Generator");
 		GameRegistry.registerTileEntity(HydroponicContainerTile.class, "HydroponicContainer");
+		GameRegistry.registerTileEntity(TilePACInterface.class, "PACInterface");
 		
 	}
 }
