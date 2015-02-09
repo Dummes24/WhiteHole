@@ -31,7 +31,7 @@ public class TileEntityControlBlock extends TileEntity implements IEnergyReceive
 	Stargate assiggnedStargate;
 	int dialStage,dialTime, assignTime= 0;	
 	boolean activationFromGui = false;
-	int[] coordsToTeleport = new int[3];
+	Stargate teleportToStargate;
 	
 	@Override
 	public boolean canConnectEnergy(ForgeDirection from) {		
@@ -53,10 +53,8 @@ public class TileEntityControlBlock extends TileEntity implements IEnergyReceive
 		return storage.getMaxEnergyStored();
 	}
 	
-	public void activateFromGui(int x, int y, int z) {		
-		coordsToTeleport[0] = x;
-		coordsToTeleport[1] = y;
-		coordsToTeleport[2] = z;
+	public void activateFromGui(Stargate stargate) {		
+		this.teleportToStargate = stargate;
 		this.activationFromGui = true;		
 	}
 	
@@ -66,6 +64,7 @@ public class TileEntityControlBlock extends TileEntity implements IEnergyReceive
 	
 	@Override
 	public void updateEntity(){
+		//Assigning Stargate
 		if (assiggnedStargate == null) {
 			assignTime++;
 			if (assignTime >= 100) {
@@ -75,15 +74,16 @@ public class TileEntityControlBlock extends TileEntity implements IEnergyReceive
 		}		
 		else {			
 			//Dial
-			if (activationFromGui && dialStage == 0) { //Noobish activation
-				worldObj.setBlock(xCoord, yCoord -1,  zCoord, Blocks.air);
-				dialStage = assiggnedStargate.dial(dialStage);
+			if (activationFromGui && dialStage == 0) {				
+				teleportToStargate.dial(dialStage);
+				dialStage = assiggnedStargate.dial(dialStage);				
 				activationFromGui = false;
 			}
 			if (dialStage != 0) {
 				dialTime++;
 			}
 			if (dialStage != 0 && dialTime >= 20) {
+				teleportToStargate.dial(dialStage);
 				dialStage = assiggnedStargate.dial(dialStage);
 				dialTime = 0;
 			}
@@ -92,21 +92,20 @@ public class TileEntityControlBlock extends TileEntity implements IEnergyReceive
 			if (assiggnedStargate.getIsActivated()) {
 				if (assiggnedStargate.openTime <= 0) {
 					assiggnedStargate.closeGate();
+					teleportToStargate.closeGate();
 				}
 				else{
 					assiggnedStargate.openTime--;
 				}
+				
 				//Teleport
 				Iterator<Entity> entities = assiggnedStargate.entitesInStargate();
 				while (entities.hasNext()) {					
 					Entity entity = entities.next();
-					assiggnedStargate.teleportEntity(entity, entity.worldObj , coordsToTeleport[0],coordsToTeleport[1],coordsToTeleport[2]);
+					assiggnedStargate.teleportEntity(entity, entity.worldObj , teleportToStargate.getX(), teleportToStargate.getY() + 3,teleportToStargate.getZ());
 				}
 			}
-		}	
-		
-			
-		//TODO Opening wormhole on both sides (needs load chunk)					
+		}		
 		
 	}
 	

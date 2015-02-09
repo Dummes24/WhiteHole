@@ -93,9 +93,11 @@ public class GuiStarGate extends GuiScreen{
 			
 			break;
 			
-		case 2:				
-				if (tileEntity.hasAssignedValidStargate() && coordsFromTextField.areValid() && validateStargate(coordsFromTextField)) { 
-					tileEntity.activateFromGui(coordsFromTextField.getX(), coordsFromTextField.getY() + 3,coordsFromTextField.getZ());
+		case 2:	
+				Stargate tempSG = getStargate(coordsFromTextField);
+				if (tileEntity.hasAssignedValidStargate() && coordsFromTextField.areValid() && tempSG != null && tempSG.getIsValid()) {
+					
+					tileEntity.activateFromGui(tempSG);
 				}			
 			break;
 
@@ -104,15 +106,18 @@ public class GuiStarGate extends GuiScreen{
 		}		
 	}
 	
-	private boolean validateStargate(Coordinations coords){		
-		if (new Stargate(tileEntity.getWorldObj(), coords.getX(), coords.getY(), coords.getZ(), 0, false).getIsValid()) {
-			return true;
-		}
-		else if (new Stargate(tileEntity.getWorldObj(), coords.getX(), coords.getY(), coords.getZ(), 1, false).getIsValid()) {
-			return true;
+	private Stargate getStargate(Coordinations coords){		
+		Stargate tempSG = new Stargate(tileEntity.getWorldObj(), coords.getX(), coords.getY(), coords.getZ(), 0, false);
+		Stargate tempSG2 = new Stargate(tileEntity.getWorldObj(), coords.getX(), coords.getY(), coords.getZ(), 1, false);
+		if (tempSG.getIsValid()) {
+			return tempSG;
 		}
 		
-		return false;
+		else if (tempSG2.getIsValid()) {
+			return tempSG2;
+		}
+		
+		return null;
 	}
 	
 	@Override
@@ -129,8 +134,8 @@ public class GuiStarGate extends GuiScreen{
 		int posX = (this.width - xSize) / 2;
 		int posY = (this.height - ySize) / 2;
 		//Buttons
-		this.buttonList.add(new GuiButton(0,posX + 125, posY + 20, 43, 18,"Select"));
-		this.buttonList.add(new GuiButton(1, posX + 125, posY + 40, 43,18,"Add"));
+		//this.buttonList.add(new GuiButton(0,posX + 125, posY + 20, 43, 18,"Select"));
+		//this.buttonList.add(new GuiButton(1, posX + 125, posY + 40, 43,18,"Add"));
 		this.buttonList.add(new GuiButton(2, posX + 125, posY + 60, 43,18,"Dial"));		
 		
 		//TextFields
